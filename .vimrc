@@ -2,13 +2,12 @@ if &compatible
   set nocompatible
 endif
 " reset augroup
-"augroup MyAutoCmd
-"  autocmd!
-"augroup END
+augroup MyAutoCmd
+  autocmd!
+augroup END
 
 " dein settings {{{
 " dein自体の自インストール
-
 let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.vim') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
@@ -39,9 +38,6 @@ endif
 
 set number "行番号表示
 syntax on  "カラーシンタックス
-" 矢印キーでなら行内を動けるように
-nnoremap <Down> gj
-nnoremap <Up>   gk
 " showbreaks
 set showbreak=↪
 " 入力モードでのカーソル移動
@@ -61,13 +57,11 @@ nnoremap お o
 nnoremap っd dd
 nnoremap っy yy
 
-"InsertModeから抜けるときにIME-OFF
-function! ImInActivate()
-  call system('fcitx-remote -c')
-endfunction
-inoremap <silent> <C-[> <ESC>:call ImInActivate()<CR>
 
-
+augroup MyAutoCmd
+  "InsertModeから抜けるときにIME-OFF
+  autocmd InsertLeave * call system('fcitx-remote -c')
+augroup END
 
 "command! FollowSymlink call s:SwitchToActualFile()
 "function! s:SwitchToActualFile()
