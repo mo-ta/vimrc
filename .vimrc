@@ -1,7 +1,6 @@
 if &compatible
   set nocompatible
 endif
-
 " reset augroup
 "augroup MyAutoCmd
 "  autocmd!
@@ -62,6 +61,11 @@ nnoremap お o
 nnoremap っd dd
 nnoremap っy yy
 
+"InsertModeから抜けるときにIME-OFF
+function! ImInActivate()
+  call system('fcitx-remote -c')
+endfunction
+inoremap <silent> <C-[> <ESC>:call ImInActivate()<CR>
 
 
 
