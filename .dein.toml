@@ -11,6 +11,9 @@ repo = 'haya14busa/vim-migemo'
 [[plugins]]
 repo = 'delphinus35/typescript-vim'
 rev  = 'colorize-template-strings'
+[[plugins]]
+repo = 'davidhalter/jedi-vim'
+on_ft = 'python'
 
 #[[plugins]]
 #repo = 'elzr/vim-json'
