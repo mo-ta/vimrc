@@ -55,7 +55,11 @@ endif
 "----------------------------------------
 set number        "行番号表示
 syntax on         "カラーシンタックス
+"colorscheme happy_hacking
+colorscheme PerfectDark
+let g:airline_theme='one'
 set hlsearch      "検索ヒット部分に色付け
+
 
 "----------------------------------------
 "key bind
