@@ -53,10 +53,16 @@ endif
 "----------------------------------------
 "オプション等
 "----------------------------------------
+set title         "編集中のファイルをタイトルに表示"
 set number        "行番号表示
+
+"----Color Syntax--------
 syntax on         "カラーシンタックス
-"colorscheme happy_hacking
-colorscheme PerfectDark
+colorscheme happy_hacking
+"colorscheme PerfectDark
+
+"----AirLine------------
+set laststatus=2
 let g:airline_theme='one'
 set hlsearch      "検索ヒット部分に色付け
 
@@ -69,6 +75,10 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
+
+"----reguler mode---------
+nnoremap j gj
+nnoremap k gk
 
 "----------------------------------------
 " 引数なしでvimを開くとNERDTreeを起動
