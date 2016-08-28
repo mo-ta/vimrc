@@ -17,14 +17,17 @@ augroup END
 " dein settings 
 "========================================
 "----------------------------------------
-" 無ければ自動インストール
+" 初期設定
 "----------------------------------------
 let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.vim') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+
+"----インストールされて無ければ、自動でインストール
 if !isdirectory(s:dein_repo_dir)
   call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
 endif
+
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
 
 "----------------------------------------
@@ -66,12 +69,14 @@ set laststatus=2
 let g:airline_theme='one'
 set hlsearch      "検索ヒット部分に色付け
 
+"----対応する括弧をハイライト
+hi MatchParen ctermbg=4　"青色
+"set showmatch
 
 "----------------------------------------
 "key bind
 "----------------------------------------
 "----incert mode---------
-inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
@@ -88,10 +93,11 @@ if has('vim_starting') &&  file_name == ''
   autocmd VimEnter * NERDTree ./
 endif
 
+
 "----------------------------------------
 "incert modeを抜けるときにIMEをoff
 "----------------------------------------
-"動くけど反応遅いのでfcitxで設定に変更
+"動くけどフックのタイミングが遅いのでfcitxで設定に変更
 " ~/.config/fcitx/config を直接編集(GUIではESCを入力不可)
 "augroup MyAutoCmd
 "  "InsertModeから抜けるときにIME-OFF
