@@ -3,13 +3,22 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
+repo = 'Shougo/unite.vim'
+
+[[plugins]]
 repo = 'Shougo/vimproc.vim'
+
+[[plugins]]
+repo = 'osyo-manga/vim-vigemo'
 
 [[plugins]]
 repo = 'vim-scripts/Perfect-Dark'
 
 [[plugins]]
 repo = 'rakr/vim-one'
+[[plugins]]
+repo ='aereal/vim-colors-japanesque' 
+
 
 [[plugins]]
 repo = 'YorickPeterse/happy_hacking.vim'

@@ -1,10 +1,9 @@
 "========================================
-" initial settings 
+" initial settings
 "========================================
 if &compatible
   set nocompatible "vi 互換じゃない
 endif
-
 "----autocmdのreset---------
 "多重起動防止 autocmd使うときは
 "augroupをMyAutoCmdにすればここで消してくれる
@@ -14,7 +13,7 @@ augroup END
 
 
 "========================================
-" dein settings 
+"" {{{ dein settings :
 "========================================
 "----------------------------------------
 " 初期設定
@@ -27,13 +26,13 @@ let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if !isdirectory(s:dein_repo_dir)
   call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
 endif
-
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
 
 "----------------------------------------
 " プラグイン読み込み＆キャッシュ作成
 "----------------------------------------
-let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
+"let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
+let s:toml_file = '~/.dein.toml'
 if dein#load_state(s:dein_dir)
   call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
   call dein#load_toml(s:toml_file)
@@ -47,10 +46,11 @@ endif
 if has('vim_starting') && dein#check_install()
   call dein#install()
 endif
+""}}}
 
 
 "========================================
-" その他 settings 
+" その他 settings
 "========================================
 
 "----------------------------------------
@@ -58,11 +58,13 @@ endif
 "----------------------------------------
 set title         "編集中のファイルをタイトルに表示"
 set number        "行番号表示
+syntax on         "カラーシンタックス
+set foldmethod=marker
 
 "----Color Syntax--------
-syntax on         "カラーシンタックス
 colorscheme happy_hacking
-"colorscheme PerfectDark
+"colorscheme japanesque
+
 
 "----AirLine------------
 set laststatus=2
@@ -76,11 +78,11 @@ hi MatchParen ctermbg=4　"青色
 "----------------------------------------
 "key bind
 "----------------------------------------
-"----incert mode---------
+"----incert mode---------/*{{{*/
 inoremap <C-k> <Up>
 inoremap <C-h> <Left>
 inoremap <C-l> <Right>
-
+"/*}}}*/
 "----reguler mode---------
 nnoremap j gj
 nnoremap k gk
@@ -92,8 +94,37 @@ let file_name = expand('%')
 if has('vim_starting') &&  file_name == ''
   autocmd VimEnter * NERDTree ./
 endif
+"" unite.vim {{{
+" The prefix key.
+nnoremap    [unite]   <Nop>
+nmap    <Leader>f [unite]
 
+" unite.vim keymap
+" https://github.com/alwei/dotfiles/blob/3760650625663f3b08f24bc75762ec843ca7e112/.vimrc
+nnoremap [unite]u  :<C-u>Unite -no-split<Space>
+nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer<CR>
+nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
+nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
+nnoremap <silent> [unite]r :<C-u>UniteWithBufferDir file<CR>
+nnoremap <silent> ,vr :UniteResume<CR>
 
+" vinarise
+let g:vinarise_enable_auto_detect = 1
+
+" unite-build map
+nnoremap <silent> ,vb :Unite build<CR>
+nnoremap <silent> ,vcb :Unite build:!<CR>
+nnoremap <silent> ,vch :UniteBuildClearHighlight<CR>
+"" }}}
+
+set wildmenu wildmode=list:full
+"補完リストなんかとかぶってる？
+
+augroup MyAutoCmd
+   autocmd InsertEnter,InsertLeave * set cursorline!
+augroup END
+" Example key mapping
+map <Space>/ <Plug>(vigemo-search)
 "----------------------------------------
 "incert modeを抜けるときにIMEをoff
 "----------------------------------------
@@ -103,3 +134,5 @@ endif
 "  "InsertModeから抜けるときにIME-OFF
 "  autocmd InsertLeave * call system('fcitx-remote -c')
 "augroup END
+
+nnoremap <silent> <C-L> :noh<C-L><CR>
