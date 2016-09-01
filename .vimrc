@@ -60,6 +60,7 @@ set title         "編集中のファイルをタイトルに表示"
 set number        "行番号表示
 syntax on         "カラーシンタックス
 set foldmethod=marker
+set scrolloff=7
 
 "----Color Syntax--------
 colorscheme happy_hacking
@@ -69,7 +70,6 @@ colorscheme happy_hacking
 "----AirLine------------
 set laststatus=2
 let g:airline_theme='one'
-set hlsearch      "検索ヒット部分に色付け
 
 "----対応する括弧をハイライト
 hi MatchParen ctermbg=4　"青色
@@ -84,8 +84,14 @@ inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 "/*}}}*/
 "----reguler mode---------
-nnoremap j gj
-nnoremap k gk
+nnoremap j gj  //物理行で移動
+nnoremap k gk　
+
+nnoremap n nzz //検索結果を画面中央に
+nnoremap N Nzz
+
+set hlsearch      "検索ヒット部分に色付け
+nnoremap <silent> <C-L> :noh<C-L><CR> //検索結果ハイライトも停止
 
 "----------------------------------------
 " 引数なしでvimを開くとNERDTreeを起動
@@ -120,11 +126,12 @@ nnoremap <silent> ,vch :UniteBuildClearHighlight<CR>
 set wildmenu wildmode=list:full
 "補完リストなんかとかぶってる？
 
+"-----migemo----------------
 augroup MyAutoCmd
    autocmd InsertEnter,InsertLeave * set cursorline!
 augroup END
-" Example key mapping
 map <Space>/ <Plug>(vigemo-search)
+
 "----------------------------------------
 "incert modeを抜けるときにIMEをoff
 "----------------------------------------
@@ -135,4 +142,3 @@ map <Space>/ <Plug>(vigemo-search)
 "  autocmd InsertLeave * call system('fcitx-remote -c')
 "augroup END
 
-nnoremap <silent> <C-L> :noh<C-L><CR>
