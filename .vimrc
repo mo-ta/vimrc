@@ -2,11 +2,11 @@
 " initial settings
 "========================================
 if &compatible
-  set nocompatible "vi äº’æ›ã˜ã‚ƒãªã„
+  set nocompatible "vi ŒİŠ·‚¶‚á‚È‚¢
 endif
-"----autocmdã®reset---------
-"å¤šé‡èµ·å‹•é˜²æ­¢ autocmdä½¿ã†ã¨ãã¯
-"augroupã‚’MyAutoCmdã«ã™ã‚Œã°ã“ã“ã§æ¶ˆã—ã¦ãã‚Œã‚‹
+"----autocmd‚Ìreset---------
+"‘½d‹N“®–h~ autocmdg‚¤‚Æ‚«‚Í
+"augroup‚ğMyAutoCmd‚É‚·‚ê‚Î‚±‚±‚ÅÁ‚µ‚Ä‚­‚ê‚é
 augroup MyAutoCmd
   autocmd!
 augroup END
@@ -16,20 +16,20 @@ augroup END
 "" {{{ dein settings :
 "========================================
 "----------------------------------------
-" åˆæœŸè¨­å®š
+" ‰Šúİ’è
 "----------------------------------------
 let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.vim') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-"----ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã•ã‚Œã¦ç„¡ã‘ã‚Œã°ã€è‡ªå‹•ã§ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
+"----ƒCƒ“ƒXƒg[ƒ‹‚³‚ê‚Ä–³‚¯‚ê‚ÎA©“®‚ÅƒCƒ“ƒXƒg[ƒ‹
 if !isdirectory(s:dein_repo_dir)
   call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
 endif
 let &runtimepath = s:dein_repo_dir .",". &runtimepath
 
 "----------------------------------------
-" ãƒ—ãƒ©ã‚°ã‚¤ãƒ³èª­ã¿è¾¼ã¿ï¼†ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½œæˆ
+" ƒvƒ‰ƒOƒCƒ““Ç‚İ‚İ•ƒLƒƒƒbƒVƒ…ì¬
 "----------------------------------------
 "let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
 let s:toml_file = '~/.dein.toml'
@@ -41,7 +41,7 @@ if dein#load_state(s:dein_dir)
 endif
 
 "----------------------------------------
-" ä¸è¶³ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®è‡ªå‹•ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
+" •s‘«ƒvƒ‰ƒOƒCƒ“‚Ì©“®ƒCƒ“ƒXƒg[ƒ‹
 "----------------------------------------
 if has('vim_starting') && dein#check_install()
   call dein#install()
@@ -50,15 +50,15 @@ endif
 
 
 "========================================
-" ãã®ä»– settings
+" ‚»‚Ì‘¼ settings
 "========================================
 
 "----------------------------------------
-"ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç­‰
+"ƒIƒvƒVƒ‡ƒ““™
 "----------------------------------------
-set title         "ç·¨é›†ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¿ã‚¤ãƒˆãƒ«ã«è¡¨ç¤º"
-set number        "è¡Œç•ªå·è¡¨ç¤º
-syntax on         "ã‚«ãƒ©ãƒ¼ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹
+set title         "•ÒW’†‚Ìƒtƒ@ƒCƒ‹‚ğƒ^ƒCƒgƒ‹‚É•\¦"
+set number        "s”Ô†•\¦
+syntax on         "ƒJƒ‰[ƒVƒ“ƒ^ƒbƒNƒX
 set foldmethod=marker
 set scrolloff=7
 
@@ -71,8 +71,8 @@ colorscheme happy_hacking
 set laststatus=2
 let g:airline_theme='one'
 
-"----å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆ
-hi MatchParen ctermbg=4ã€€"é’è‰²
+"----‘Î‰‚·‚éŠ‡ŒÊ‚ğƒnƒCƒ‰ƒCƒg
+hi MatchParen ctermbg=4@"ÂF
 "set showmatch
 
 "----------------------------------------
@@ -84,17 +84,17 @@ inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 "/*}}}*/
 "----reguler mode---------
-nnoremap j gj  //ç‰©ç†è¡Œã§ç§»å‹•
-nnoremap k gkã€€
+nnoremap j gj  //•¨—s‚ÅˆÚ“®
+nnoremap k gk@
 
-nnoremap n nzz //æ¤œç´¢çµæœã‚’ç”»é¢ä¸­å¤®ã«
+nnoremap n nzz //ŒŸõŒ‹‰Ê‚ğ‰æ–Ê’†‰›‚É
 nnoremap N Nzz
 
-set hlsearch      "æ¤œç´¢ãƒ’ãƒƒãƒˆéƒ¨åˆ†ã«è‰²ä»˜ã‘
-nnoremap <silent> <C-L> :noh<C-L><CR> //æ¤œç´¢çµæœãƒã‚¤ãƒ©ã‚¤ãƒˆã‚‚åœæ­¢
+set hlsearch      "ŒŸõƒqƒbƒg•”•ª‚ÉF•t‚¯
+nnoremap <silent> <C-L> :noh<C-L><CR> //ŒŸõŒ‹‰ÊƒnƒCƒ‰ƒCƒg‚à’â~
 
 "----------------------------------------
-" å¼•æ•°ãªã—ã§vimã‚’é–‹ãã¨NERDTreeã‚’èµ·å‹•
+" ˆø”‚È‚µ‚Åvim‚ğŠJ‚­‚ÆNERDTree‚ğ‹N“®
 "----------------------------------------
 let file_name = expand('%')
 if has('vim_starting') &&  file_name == ''
@@ -124,7 +124,7 @@ nnoremap <silent> ,vch :UniteBuildClearHighlight<CR>
 "" }}}
 
 set wildmenu wildmode=list:full
-"è£œå®Œãƒªã‚¹ãƒˆãªã‚“ã‹ã¨ã‹ã¶ã£ã¦ã‚‹ï¼Ÿ
+"•âŠ®ƒŠƒXƒg‚È‚ñ‚©‚Æ‚©‚Ô‚Á‚Ä‚éH
 
 "-----migemo----------------
 augroup MyAutoCmd
@@ -133,12 +133,12 @@ augroup END
 map <Space>/ <Plug>(vigemo-search)
 
 "----------------------------------------
-"incert modeã‚’æŠœã‘ã‚‹ã¨ãã«IMEã‚’off
+"incert mode‚ğ”²‚¯‚é‚Æ‚«‚ÉIME‚ğoff
 "----------------------------------------
-"å‹•ãã‘ã©ãƒ•ãƒƒã‚¯ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãŒé…ã„ã®ã§fcitxã§è¨­å®šã«å¤‰æ›´
-" ~/.config/fcitx/config ã‚’ç›´æ¥ç·¨é›†(GUIã§ã¯ESCã‚’å…¥åŠ›ä¸å¯)
+"“®‚­‚¯‚ÇƒtƒbƒN‚Ìƒ^ƒCƒ~ƒ“ƒO‚ª’x‚¢‚Ì‚Åfcitx‚Åİ’è‚É•ÏX
+" ~/.config/fcitx/config ‚ğ’¼Ú•ÒW(GUI‚Å‚ÍESC‚ğ“ü—Í•s‰Â)
 "augroup MyAutoCmd
-"  "InsertModeã‹ã‚‰æŠœã‘ã‚‹ã¨ãã«IME-OFF
+"  "InsertMode‚©‚ç”²‚¯‚é‚Æ‚«‚ÉIME-OFF
 "  autocmd InsertLeave * call system('fcitx-remote -c')
 "augroup END
 
