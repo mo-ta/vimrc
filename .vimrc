@@ -22,14 +22,6 @@ let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.vim') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-echo s:dein_repo_dir
-
-set swapfile
-set directory=C:/Users/appli/.vim/tmp/swap
-set backup
-set backupdir=C:/Users/appli/.vim/tmp/backup
-
-
 
 "----インストールされて無ければ、自動でインストール
 if !isdirectory(s:dein_repo_dir)
@@ -61,6 +53,34 @@ endif
 "========================================
 " その他 settings
 "========================================
+"----------------------------------------
+"swapファイル ~/.vim/tmp/swap
+"backupファイル ~/.vim/tmp/backp
+"に保存 フォルダがない場合は自動作成
+"----------------------------------------
+let  s:tmp_dir    = s:cache_home . '/tmp'
+let  s:swap_dir   = s:tmp_dir    . '/swap'
+let  s:backup_dir = s:tmp_dir    . '/backup'
+
+if !isdirectory(s:tmp_dir)
+  call mkdir(iconv(s:tmp_dir, &encoding, &termencoding), 'p')
+endif
+
+if !isdirectory(s:swap_dir)
+  call mkdir(iconv(s:swap_dir, &encoding, &termencoding), 'p')
+endif
+
+if !isdirectory(s:backup_dir)
+  call mkdir(iconv(s:backup_dir, &encoding, &termencoding), 'p')
+endif
+
+set swapfile
+set directory=iconv(s:swap_dir, &encoding, &termencoding)
+set backup
+set backupdir=iconv(s:swap_dir, &encoding, &termencoding)
+
+
+
 
 "----------------------------------------
 "オプション等
