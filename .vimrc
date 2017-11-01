@@ -22,6 +22,15 @@ let s:cache_home = empty($XDG_CACHE_HOME) ? expand('~/.vim') : $XDG_CACHE_HOME
 let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
+echo s:dein_repo_dir
+
+set swapfile
+set directory=C:/Users/appli/.vim/tmp/swap
+set backup
+set backupdir=C:/Users/appli/.vim/tmp/backup
+
+
+
 "----インストールされて無ければ、自動でインストール
 if !isdirectory(s:dein_repo_dir)
   call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
