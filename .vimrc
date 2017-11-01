@@ -73,12 +73,8 @@ endif
 if !isdirectory(s:backup_dir)
   call mkdir(iconv(s:backup_dir, &encoding, &termencoding), 'p')
 endif
-
-set swapfile
-set directory=iconv(s:swap_dir, &encoding, &termencoding)
-set backup
-set backupdir=iconv(s:swap_dir, &encoding, &termencoding)
-
+set swapfile directory =C:/Users/appli/.vim/tmp/swap
+set backup backupdir =C:/Users/appli/.vim/tmp/backup
 
 
 
@@ -113,10 +109,12 @@ inoremap <C-h> <Left>
 inoremap <C-l> <Right>
 "/*}}}*/
 "----reguler mode---------
-nnoremap j gj  //物理行で移動
+"物理行で移動
+nnoremap j gj  
 nnoremap k gk　
 
-nnoremap n nzz //検索結果を画面中央に
+"検索結果を画面中央に
+nnoremap n nzz
 nnoremap N Nzz
 
 set hlsearch      "検索ヒット部分に色付け
