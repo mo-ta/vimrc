@@ -9,59 +9,186 @@ repo = 'Shougo/unite.vim'
 repo = 'Shougo/vimproc.vim'
 
 [[plugins]]
+repo = 'Shougo/unite-session'
+
+[[plugins]]
 repo = 'osyo-manga/vim-vigemo'
 
 [[plugins]]
-repo = 'vim-scripts/Perfect-Dark'
-
-[[plugins]]
-repo = 'rakr/vim-one'
-[[plugins]]
-repo ='aereal/vim-colors-japanesque' 
-
-
-[[plugins]]
-repo = 'YorickPeterse/happy_hacking.vim'
-
-[[plugins]]
 repo = 'haya14busa/vim-migemo'
-
-[[plugins]]
-repo = 'delphinus35/typescript-vim'
-rev  = 'colorize-template-strings'
-[[plugins]]
-repo = 'davidhalter/jedi-vim'
-on_ft = 'python'
-
-[[plugins]]
-repo = 'elzr/vim-json'
-if   = '''! has('kaoriya')'''
-
 
 [[plugins]]
 repo    = 'vim-airline/vim-airline'
 depends = ['vim-airline-themes']
 
 [[plugins]]
- repo = 'vim-airline/vim-airline-themes'
+repo = 'vim-airline/vim-airline-themes'
 
 [[plugins]]
-repo = 'itchyny/lightline.vim'
-[[plugins]] 
-repo = 'osyo-manga/vim-precious'
-depends = ['context_filetype.vim']
+repo = 'mo-ta/vim-colors-mota'
+#repo = 'aereal/vim-colors-japanesque'
 
-[[plugins]] repo = 'Shougo/context_filetype.vim'
+[[plugins]]
+repo = 'fuenor/qfixhowm'
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+[[plugins]]
+repo =  'tacroe/unite-mark'
+depends = ['unite']
+
+[[plugins]]
+repo =  'Shougo/neomru.vim'
+depends = ['unite']
+
+[[plugins]]
+repo =  'Shougo/neoyank.vim'
+depends = ['unite']
+
+[[plugins]]
+# repo = 'kana/vim-submode'
+repo = 'mo-ta/vim-submode'
+
+[[plugins]]
+repo = 'vim-scripts/ruby-matchit'
+
+[[plugins]]
+repo = 'tpope/vim-endwise'
+
+[[plugins]]
+repo =  'easymotion/vim-easymotion'
+
+[[plugins]]
+repo = 'Shougo/unite-outline'
+
+[[plugins]]
+repo =  'thinca/vim-ref'
+
+[[plugins]]
+repo =   'yuku-t/vim-ref-ri'
 
 [[plugins]] # toml syntax
 repo = 'cespare/vim-toml'
 on_ft = 'toml'
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'
+repo = 'Shougo/vimfiler'
 
 [[plugins]]
-repo =  'evidens/vim-twig'
+repo =  'kannokanno/previm'
 
 [[plugins]]
-repo =  'w0ng/vim-hybrid'
+repo = 'tpope/vim-markdown'
+
+[[plugins]]
+repo =  'tyru/open-browser.vim'
+
+[[plugins]]
+repo =  'osyo-manga/vim-over'
+
+[[plugins]]
+repo = 'LeafCage/yankround.vim'
+
+[[plugins]]
+repo = 'rhysd/clever-f.vim'
+
+[[plugins]]
+ # repo = 'rhysd/accelerated-jk'
+ repo = 'mo-ta/accelerated-jk'
+
+[[plugins]]
+repo = 'sgur/unite-qf'
+
+[[plugins]]
+repo = 'sjl/gundo.vim'
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo = 'vim-scripts/DrawIt'
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'szw/vim-tags'
+
+[[plugins]]
+repo = 'vim-jp/vimdoc-ja'
+
+[[plugins]]
+repo = 'tyru/caw.vim'
+#[[plugins]]
+#repo = 'delphinus35/typescript-vim'
+#rev  = 'colorize-template-strings'
+#[[plugins]]
+#repo = 'davidhalter/jedi-vim'
+#on_ft = 'python'
+
+#[[plugins]]
+#repo = 'elzr/vim-json'
+#if   = '''! has('kaoriya')'''
+
+
+
+#現在のカーソル位置のコンテキストによって filetype を切り換える
+#repo = 'osyo-manga/vim-precious'
+#depends = ['context_filetype.vim']
+#[[plugins]] 
+#repo = 'Shougo/context_filetype.vim'
+
+
+#[[plugins]]
+#repo = 'scrooloose/nerdtree'
+
+#[[plugins]]
+#repo =  'evidens/vim-twig'
+
+#[[plugins]]
+#repo =  'w0ng/vim-hybrid'
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+on_i = 1
+hook_add = 'let g:deoplete#enable_at_startup = 1'
+
+# vim8でdeopleteを使うのに必要
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+on_ft = ['ruby']
+
+# vim8でdeopleteを使うのに必要
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+on_ft = ['ruby']
+
+[[plugins]]
+repo = 'mechatroner/rainbow_csv'
+
+[[plugins]]
+repo = 'Shougo/deoplete-rct'
+on_ft = ['ruby']
+
+# Rubyの自動補完
+[[plugins]]
+repo = 'fishbullet/deoplete-ruby'
+on_ft = ['ruby']
+
+# Rubyの自動補完
+#[[plugins]]
+#repo = 'osyo-manga/vim-monster'
+#on_i = 1
+#hook_add = aaa
+#let g:monster#completion#rcodetools#backend = "async_rct_complete"
+#let g:deoplete#sources#omni#input_patterns = {
+#  \ "ruby" : '[^. *\t]\.\w*\|\h\w*::',
+#  \}
+#aaa
+
+
+
+
+#[[plugins]]
+#repo = 'ctrlpvim/ctrlp.vim'
