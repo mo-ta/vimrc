@@ -241,7 +241,7 @@ let g:unite_source_file_mru_filename_format = ':~:.' "最近開いたファイル
 let g:unite_source_session_enable_auto_save = 1
 let g:unite_source_bookmark_directory = s:bookmark_dir
 
-"Mapping In Unite
+"-- Mapping In Unite --
 augroup UniteKeyMap
     autocmd!
     autocmd FileType unite call s:unite_my_settings()
@@ -659,13 +659,17 @@ nnoremap ciY ciW<C-r>0<ESC><Right>
 nnoremap - <C-x>
 nnoremap + <C-a>
 
-" -- 変更点へjump --
+"-- 変更点へjump --
 call submode#enter_with('jump-modify', 'n', '', '<LocalLeader>i', 'g,')
 call submode#enter_with('jump-modify', 'n', '', '<LocalLeader>o', 'g;')
 call submode#map('jump-modify', 'n', '', 'i', 'g,')
 call submode#map('jump-modify', 'n', '', 'o', 'g;')
 
-" -- winっぽく Shift + 矢印で領域選択 --
+
+"----------------------------------------
+" Visual Mode 関連
+"----------------------------------------
+"-- winっぽく Shift + 矢印で領域選択 --
 nnoremap <S-Up>    v<Up>
 nnoremap <S-Down>  v<Down>
 nnoremap <S-Left>  v<Left>
@@ -676,8 +680,8 @@ vnoremap <S-Down>  <Down>
 vnoremap <S-Left>  <Left>
 vnoremap <S-Right> <Right>
 
-"-- v をトルグにしてVisualModeを切り替え --
-vnoremap v :<C-u>call <SID>vmode_toggle()<CR>
+"-- トルグでVisualModeを切り替え --
+vnoremap <silent>v :<C-u>call <SID>vmode_toggle()<CR>
 
 function! s:vmode_toggle()
    let l:vmode_now = visualmode()
@@ -690,6 +694,29 @@ function! s:vmode_toggle()
    else
    endif
 endfunction
+
+"-- vim-expand-region --
+" - mapping -
+map L <Plug>(expand_region_expand)
+map H <Plug>(expand_region_shrink)
+
+" - 動作設定 -
+" 'ib' Support nesting of parentheses
+" 'iB' Support nesting of braces
+" 'il' inside line. https://github.com/kana/vim-textobj-line
+" 'ie' entire file. https://github.com/kana/vim-textobj-entire
+let g:expand_region_text_objects = {
+\ 'iw' :0,
+\ 'iW' :0,
+\ 'i"' :0,
+\ 'i''' :0,
+\ 'i]' :1,
+\ 'ib' :1,
+\ 'iB' :1,
+\ 'il' :0,
+\ 'ip' :0,
+\ 'ie' :0,
+\ }
 
 
 "----------------------------------------
@@ -794,6 +821,42 @@ endif
 set matchpairs& matchpairs+=<:>
 set matchpairs+=「:」,『:』,（:）,【:】,《:》,〈:〉,［:］,‘:’,“:”
 
+
+"----------------------------------------
+" 移動命令拡張
+"----------------------------------------
+"-- accelerated_jkで加速, l,h にも拡張 --
+let g:accelerated_jk_acceleration_table = [7,12,17,21,24,26,28,30]
+nmap k <Plug>(accelerated_gk)
+nmap j <Plug>(accelerated_gj)
+nmap l <Plug>(accelerated_l)
+nmap h <Plug>(accelerated_h)
+
+"-- j,k と gk,gj入れ替えるので ---
+noremap gk k
+noremap gj j
+vnoremap k gk
+vnoremap j jk
+
+"-- <LL>j, <LL>kで加速 (J,Kでさらに加速)
+let s:move_jk_step_size = 15
+let s:move_jk_step_size_large = 45
+
+call submode#enter_with('move-j', 'nv', '', '<LocalLeader>j', s:move_jk_step_size . 'gj')
+call submode#map('move-j', 'nv', '', 'j'  , s:move_jk_step_size . 'gj')
+call submode#map('move-j', 'nv', '', 'J'  , s:move_jk_step_size_large . 'gj')
+
+call submode#enter_with('move-k', 'nv', '', '<LocalLeader>k' , s:move_jk_step_size .'gk')
+call submode#map('move-k', 'nv', '', 'k'  , s:move_jk_step_size . 'gk')
+call submode#map('move-k', 'nv', '', 'K'  , s:move_jk_step_size_large . 'gk')
+
+"-- <LL>l => $, <LL>k => ^ or 0 -
+noremap <LocalLeader>l $
+noremap <LocalLeader>h ^
+call submode#enter_with('move-l-head', 'nv', '', '<LocalLeader>h'  ,'^')
+call submode#map('move-l-head', 'nv', '', 'h'  ,'0')
+
+
 " =============================実験中============================================
 " gmilk コマンドの結果をUnite qf で表示する
 command! -nargs=1 Gmilk call s:Gmilk("gmilk -a -n 200", <f-args>)
@@ -849,38 +912,3 @@ set foldcolumn=2      " 折り畳みの状態を左端n列に表示
 " https://hatebu.me/entry/2017/09/18/223131
 " https://www.soum.co.jp/misc/vim-no-susume/1/
 " http://secret-garden.hatenablog.com/entry/2015/04/16/000000
-
-noremap gk k
-noremap gj j
-
-"-- accelerated_jkで加速, l,h にも拡張
-let g:accelerated_jk_acceleration_limit = 250
-let g:accelerated_jk_acceleration_table = [7,12,17,21,24,26,28,30]
-
-nmap j <Plug>(accelerated_gj)
-nmap k <Plug>(accelerated_gk)
-nmap l <Plug>(accelerated_l)
-nmap h <Plug>(accelerated_h)
-vmap j <Plug>(accelerated_gj)
-vmap k <Plug>(accelerated_gk)
-vmap l <Plug>(accelerated_l)
-vmap h <Plug>(accelerated_h)
-"
-"-- <LL>j, <LL>kで加速 (J,Kでさらに加速)
-let s:move_jk_step_size = 15
-let s:move_jk_step_size_large = 45
-
-call submode#enter_with('move-j', 'nv', '', '<LocalLeader>j', s:move_jk_step_size . 'gj')
-call submode#map('move-j', 'nv', '', 'j'  , s:move_jk_step_size . 'gj')
-call submode#map('move-j', 'nv', '', 'J'  , s:move_jk_step_size_large . 'gj')
-
-call submode#enter_with('move-k', 'nv', '', '<LocalLeader>k' , s:move_jk_step_size .'gk')
-call submode#map('move-k', 'nv', '', 'k'  , s:move_jk_step_size . 'gk')
-call submode#map('move-k', 'nv', '', 'K'  , s:move_jk_step_size_large . 'gk')
-
-"-- <LL>l => $, <LL>k => ^ or 0 --
-noremap <LocalLeader>l $
-noremap <LocalLeader>h ^
-call submode#enter_with('move-l-head', 'nv', '', '<LocalLeader>h'  ,'^')
-call submode#map('move-l-head', 'nv', '', 'h'  ,'0')
-

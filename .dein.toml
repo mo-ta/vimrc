@@ -95,7 +95,7 @@ repo = 'rhysd/clever-f.vim'
 
 [[plugins]]
  # repo = 'rhysd/accelerated-jk'
- repo = 'mo-ta/accelerated-jk'
+repo = 'mo-ta/accelerated-jk'
 
 [[plugins]]
 repo = 'sgur/unite-qf'
@@ -118,6 +118,48 @@ repo = 'szw/vim-tags'
 [[plugins]]
 repo = 'vim-jp/vimdoc-ja'
 
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+
+[[plugins]]
+repo = 'kana/vim-textobj-line'
+
+[[plugins]]
+repo = 'kana/vim-textobj-entire'
+
+[[plugins]]
+repo = 'terryma/vim-expand-region'
+ 
+[[plugins]]
+repo = 'tyru/caw.vim'
+#[[plugins]]
+#repo = 'delphinus35/typescript-vim'
+#rev  = 'colorize-template-strings'
+#[[plugins]]
+#repo = 'davidhalter/jedi-vim'
+#on_ft = 'python'
+
+#[[plugins]]
+#repo = 'elzr/vim-json'
+#if   = '''! has('kaoriya')'''
+
+
+
+#現在のカーソル位置のコンテキストによって filetype を切り換える
+#repo = 'osyo-manga/vim-precious'
+#depends = ['context_filetype.vim']
+#[[plugins]] 
+#repo = 'Shougo/context_filetype.vim'
+
+
+#[[plugins]]
+#repo = 'scrooloose/nerdtree'
+
+#[[plugins]]
+
+[[plugins]]
+repo = 'terryma/vim-expand-region'
+ 
 [[plugins]]
 repo = 'tyru/caw.vim'
 #[[plugins]]
