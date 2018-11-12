@@ -1,0 +1,53 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 窓使いの憂鬱 - dot.mayu
+# Copyright (C) 1999-2005, TAGA Nayuta <nayuta@users.sourceforge.net>
+#
+# まずキーボード定義を読み込む
+if ( USE104 )
+    include "104.mayu"		# 104 キーボード設定
+    if ( USE109on104 )
+        include "109on104.mayu"	# 104 キーボードを 109 キーボード風に
+    endif
+else
+    include "109.mayu"		# 109 キーボード設定
+    if ( USE104on109 )
+        include "104on109.mayu"	# 109 キーボードを 104 キーボード風に
+    endif
+endif
+
+if ( USEdefault )
+    include	"default.mayu"	# Emacs ライクなさまざまな設定
+endif
+
+keymap Global
+
+#=======OneShot Mod====================================
+mod Shift += !!Space #SandS
+mod Control += !!Colon #:をCtrlに
+#capslock -> control
+mod Control += E0英数
+key *E0英数 = *LControl
+
+mod mod0 += !!E0無変換
+mod mod0 += !!変換
+
+key *IC-*M0-*変換 = *&SetImeStatus(toggle)
+key *IC-*M0-E0無変換 = *&SetImeStatus(off) *Escape
+
+key M0-q = &LoadSetting # 設定ファイルの読み込み
+
+key *IC-M0-h = LEFT
+key *IC-M0-k = UP
+key *IC-M0-j = DOWN
+key *IC-M0-l = RIGHT
+key *IC-M0-O = A-TAB
+key *IC-M0-I = A-S-TAB
+
+key *IC-C-M0-h = S-LEFT
+key *IC-C-M0-k = S-UP
+key *IC-C-M0-j = S-DOWN
+key *IC-C-M0-l = S-RIGHT
+
+key C-m = ENTER
+key C-i = TAB 
+key C-h = BACKSPACE 
