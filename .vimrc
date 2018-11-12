@@ -140,6 +140,7 @@ set shiftwidth=4
 set tabstop=4
 set wildmenu wildmode=list:longest,full "ワイルドメニュー設定
 set helplang=ja,en       "helpは日本語で                                        sh
+set pumheight=10
 
 if has("kaoriya")
     set fileencodings=guess
@@ -646,6 +647,7 @@ inoremap <Esc> <Esc><Right>
 
 "-- タイポ修正<Insert> --
 inoremap <C-t> <Esc><Left>"zx"zpa
+nnoremap <C-t> <Left>"zx"pz
 
 
 "-- 行末までヤンク<Normal,Visual> --
@@ -673,7 +675,7 @@ call submode#map('jump-modify', 'n', '', 'o', 'g;')
 nnoremap <S-Up>    v<Up>
 nnoremap <S-Down>  v<Down>
 nnoremap <S-Left>  v<Left>
-nnoremap <S-Right> v<Right>
+noremap <S-Right> v<Right>
 
 vnoremap <S-Up>    <Up>
 vnoremap <S-Down>  <Down>
@@ -821,42 +823,6 @@ endif
 set matchpairs& matchpairs+=<:>
 set matchpairs+=「:」,『:』,（:）,【:】,《:》,〈:〉,［:］,‘:’,“:”
 
-
-"----------------------------------------
-" 移動命令拡張
-"----------------------------------------
-"-- accelerated_jkで加速, l,h にも拡張 --
-let g:accelerated_jk_acceleration_table = [7,12,17,21,24,26,28,30]
-nmap k <Plug>(accelerated_gk)
-nmap j <Plug>(accelerated_gj)
-nmap l <Plug>(accelerated_l)
-nmap h <Plug>(accelerated_h)
-
-"-- j,k と gk,gj入れ替えるので ---
-noremap gk k
-noremap gj j
-vnoremap k gk
-vnoremap j jk
-
-"-- <LL>j, <LL>kで加速 (J,Kでさらに加速)
-let s:move_jk_step_size = 15
-let s:move_jk_step_size_large = 45
-
-call submode#enter_with('move-j', 'nv', '', '<LocalLeader>j', s:move_jk_step_size . 'gj')
-call submode#map('move-j', 'nv', '', 'j'  , s:move_jk_step_size . 'gj')
-call submode#map('move-j', 'nv', '', 'J'  , s:move_jk_step_size_large . 'gj')
-
-call submode#enter_with('move-k', 'nv', '', '<LocalLeader>k' , s:move_jk_step_size .'gk')
-call submode#map('move-k', 'nv', '', 'k'  , s:move_jk_step_size . 'gk')
-call submode#map('move-k', 'nv', '', 'K'  , s:move_jk_step_size_large . 'gk')
-
-"-- <LL>l => $, <LL>k => ^ or 0 -
-noremap <LocalLeader>l $
-noremap <LocalLeader>h ^
-call submode#enter_with('move-l-head', 'nv', '', '<LocalLeader>h'  ,'^')
-call submode#map('move-l-head', 'nv', '', 'h'  ,'0')
-
-
 " =============================実験中============================================
 " gmilk コマンドの結果をUnite qf で表示する
 command! -nargs=1 Gmilk call s:Gmilk("gmilk -a -n 200", <f-args>)
@@ -912,3 +878,33 @@ set foldcolumn=2      " 折り畳みの状態を左端n列に表示
 " https://hatebu.me/entry/2017/09/18/223131
 " https://www.soum.co.jp/misc/vim-no-susume/1/
 " http://secret-garden.hatenablog.com/entry/2015/04/16/000000
+
+noremap gk k
+noremap gj j
+
+"-- accelerated_jkで加速, l,h にも拡張
+let g:accelerated_jk_acceleration_table = [7,12,17,21,24,26,28,30]
+
+nmap k <Plug>(accelerated_gk)
+nmap j <Plug>(accelerated_gj)
+nmap l <Plug>(accelerated_l)
+nmap h <Plug>(accelerated_h)
+"
+"-- <LL>j, <LL>kで加速 (J,Kでさらに加速)
+let s:move_jk_step_size = 15
+let s:move_jk_step_size_large = 45
+
+call submode#enter_with('move-j', 'nv', '', '<LocalLeader>j', s:move_jk_step_size . 'gj')
+call submode#map('move-j', 'nv', '', 'j'  , s:move_jk_step_size . 'gj')
+call submode#map('move-j', 'nv', '', 'J'  , s:move_jk_step_size_large . 'gj')
+
+call submode#enter_with('move-k', 'nv', '', '<LocalLeader>k' , s:move_jk_step_size .'gk')
+call submode#map('move-k', 'nv', '', 'k'  , s:move_jk_step_size . 'gk')
+call submode#map('move-k', 'nv', '', 'K'  , s:move_jk_step_size_large . 'gk')
+
+"-- <LL>l => $, <LL>k => ^ or 0 -
+noremap <LocalLeader>l $
+noremap <LocalLeader>h ^
+call submode#enter_with('move-l-head', 'nv', '', '<LocalLeader>h'  ,'^')
+call submode#map('move-l-head', 'nv', '', 'h'  ,'0')
+
