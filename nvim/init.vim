@@ -88,6 +88,7 @@ let &backupdir = s:backup_dir
 
 if has('persistent_undo')
     let &undodir = s:undo_dir
+    set undofile
 endif
 
 "----------------------------------------
@@ -183,7 +184,7 @@ set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボ�
 " Python
 "----------------------------------------
 " 実行ファイルのフォルダにpython3を作りその中に関連ファイルを入れる設定
-" set runtimepath+=$VIM
+set runtimepath+=$VIM
 " set pythonthreedll=$VIM/python3/python35.dll
 let g:python3_host_prog = 'python'
 
@@ -553,8 +554,11 @@ set undofile "Undo情報をファイルに記録
 "-- GUndo --
 let g:gundo_auto_preview =   0
 let g:gundo_prefer_python3 = 1
+nnoremap <silent> <leader>u :<C-u>UndotreeToggle<CR>
 
-nnoremap <silent> <leader>u :<C-u>GundoToggle<CR>
+"-- UndoTree ---
+let g:undotree_SetFocusWhenToggle =  1
+nnoremap <silent> <F7> :<C-u>GundoToggle<CR>
 
 "-- ClearUndo--
 command! -bar ClearUndo  call s:clear_undo()
@@ -567,6 +571,8 @@ function! s:clear_undo() abort
 endfunction
 
 nnoremap <LocalLeader>U :<C-u>ClearUndo<CR>
+
+
 
 
 "------------------------------------------------------------
@@ -743,6 +749,7 @@ endfunction
 " Quick Run
 "----------------------------------------
 noremap <silent>mn :w<CR>:QuickRun<CR>
+noremap <silent><F8> :w<CR>:QuickRun<CR>
 "-- key ---
 
 "-- config --

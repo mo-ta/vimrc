@@ -242,3 +242,6 @@ repo = "pepo-le/win-ime-con.nvim"
 
 [[plugins]]
 repo = "w0rp/ale"
+[[plugins]]
+repo = "mbbill/undotree"
+
