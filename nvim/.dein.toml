@@ -1,12 +1,14 @@
-#基本は github.com のレポジトリーを指定するだけ
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
 
-# [[plugins]]
-# repo = 'Shougo/vimproc.vim'
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
 
 [[plugins]]
 repo = 'Shougo/unite-session'
@@ -25,16 +27,14 @@ depends = ['vim-airline-themes']
 repo = 'vim-airline/vim-airline-themes'
 
 [[plugins]]
-repo = 'mo-ta/vim-colors-mota'
-[[plugins]]
 # repo = 'mo-ta/vim-colors-mota'
 repo = 'aereal/vim-colors-japanesque'
 
 # [[plugins]]
 # repo = 'fuenor/qfixhowm'
 
-# [[plugins]]
-# repo = 'thinca/vim-quickrun'
+[[plugins]]
+repo = 'thinca/vim-quickrun'
 
 [[plugins]]
 repo =  'tacroe/unite-mark'
@@ -52,8 +52,8 @@ depends = ['unite']
 # repo = 'kana/vim-submode'
 repo = 'mo-ta/vim-submode'
 
-[[plugins]]
-repo = 'vim-scripts/ruby-matchit'
+#[[plugins]]
+#repo = 'vim-scripts/ruby-matchit'
 
 [[plugins]]
 repo = 'tpope/vim-endwise'
@@ -77,14 +77,14 @@ on_ft = 'toml'
 # [[plugins]]
 # repo = 'Shougo/vimfiler'
 
-# [[plugins]]
-# repo =  'kannokanno/previm'
+[[plugins]]
+repo =  'kannokanno/previm'
 
 [[plugins]]
 repo = 'tpope/vim-markdown'
 
-# [[plugins]]
-# repo =  'tyru/open-browser.vim'
+[[plugins]]
+repo =  'tyru/open-browser.vim'
 
 [[plugins]]
 repo =  'osyo-manga/vim-over'
@@ -96,7 +96,7 @@ repo = 'LeafCage/yankround.vim'
 repo = 'rhysd/clever-f.vim'
 
 [[plugins]]
- # repo = 'rhysd/accelerated-jk'
+# repo = 'rhysd/accelerated-jk'
 repo = 'mo-ta/accelerated-jk'
 
 [[plugins]]
@@ -105,8 +105,6 @@ repo = 'sgur/unite-qf'
 [[plugins]]
 repo = 'sjl/gundo.vim'
 
-[[plugins]]
-repo = 'Shougo/denite.nvim'
 
 # [[plugins]]
 # repo = 'vim-scripts/DrawIt'
@@ -131,7 +129,7 @@ repo = 'vim-jp/vimdoc-ja'
 
 # [[plugins]]
 # repo = 'terryma/vim-expand-region'
- 
+
 [[plugins]]
 repo = 'tyru/caw.vim'
 
@@ -150,9 +148,6 @@ repo = 'tyru/caw.vim'
 #repo = 'elzr/vim-json'
 #if   = '''! has('kaoriya')'''
 
-
-
-#現在のカーソル位置のコンテキストによって filetype を切り換える
 #repo = 'osyo-manga/vim-precious'
 #depends = ['context_filetype.vim']
 #[[plugins]] 
@@ -176,7 +171,6 @@ repo = 'tyru/caw.vim'
 
 
 
-#現在のカーソル位置のコンテキストによって filetype を切り換える
 #repo = 'osyo-manga/vim-precious'
 #depends = ['context_filetype.vim']
 #[[plugins]] 
@@ -197,12 +191,10 @@ repo = 'tyru/caw.vim'
 #on_i = 1
 # hook_add = 'let g:deoplete#enable_at_startup = 1'
 
-# vim8でdeopleteを使うのに必要
 # [[plugins]]
 # repo = 'roxma/nvim-yarp'
 # on_ft = ['ruby']
 
-# vim8でdeopleteを使うのに必要
 # [[plugins]]
 # repo = 'roxma/vim-hug-neovim-rpc'
 # on_ft = ['ruby']
@@ -214,12 +206,10 @@ repo = 'mechatroner/rainbow_csv'
 # repo = 'Shougo/deoplete-rct'
 # on_ft = ['ruby']
 
-# Rubyの自動補完
 # [[plugins]]
 # repo = 'fishbullet/deoplete-ruby'
 # on_ft = ['ruby']
 
-# Rubyの自動補完
 #[[plugins]]
 #repo = 'osyo-manga/vim-monster'
 #on_i = 1
@@ -247,5 +237,8 @@ repo = 'mechatroner/rainbow_csv'
 
 # [[plugins]]
 # repo = "aklt/plantuml-syntax"
-# [[plugins]]
+[[plugins]]
 repo = "pepo-le/win-ime-con.nvim"
+
+[[plugins]]
+repo = "w0rp/ale"

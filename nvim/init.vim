@@ -4,24 +4,6 @@
 if &compatible
     set nocompatible "vi 互換じゃない
 endif
-"----------------------------------------
-" いらないプラグインOFF!
-"----------------------------------------
-let g:loaded_gzip              = 1
-let g:loaded_tar               = 1
-let g:loaded_tarPlugin         = 1
-let g:loaded_zip               = 1
-let g:loaded_zipPlugin         = 1
-let g:loaded_rrhelper          = 1
-let g:loaded_2html_plugin      = 1
-let g:loaded_vimball           = 1
-let g:loaded_vimballPlugin     = 1
-let g:loaded_getscript         = 1
-let g:loaded_getscriptPlugin   = 1
-let g:loaded_netrw             = 1
-let g:loaded_netrwPlugin       = 1
-let g:loaded_netrwSettings     = 1
-let g:loaded_netrwFileHandlers = 1
 
 "----------------------------------------
 " dein settings 
@@ -107,7 +89,6 @@ let &backupdir = s:backup_dir
 if has('persistent_undo')
     let &undodir = s:undo_dir
 endif
-
 
 "----------------------------------------
 " オプション等
@@ -205,6 +186,7 @@ set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボ�
 " set runtimepath+=$VIM
 " set pythonthreedll=$VIM/python3/python35.dll
 let g:python3_host_prog = 'python'
+
 "----------------------------------------
 " Mapping無効化 Leader割当
 "----------------------------------------
@@ -219,7 +201,6 @@ nnoremap , <Nop>
 "-- <Leader> <LocalLeader>設定 --
 let mapleader="s"
 let maplocalleader = "\<Space>"
-
 
 "----------------------------------------
 " Sub Mode
@@ -273,8 +254,8 @@ call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
 call denite#custom#map('normal', "s", '<denite:do_action:split>')
 
 "-- KeyMapping --
-nnoremap <silent> <leader>h :<C-u>Denite file_mru<CR>
-nnoremap <silent> <leader>b :<C-u>Denite buffer<CR>
+nnoremap <silent> <leader>h :<C-u>Unite file_mru<CR>
+nnoremap <silent> <leader>b :<C-u>Unite buffer<CR>
 nnoremap <silent> <leader>y :<C-u>Unite history/yank<CR>
 nnoremap <silent> <leader>Y :<C-u>Unite yankround<CR>
 nnoremap <silent> <leader>o :<C-u>Unite -vertical -winwidth=30 outline<CR>
@@ -288,7 +269,7 @@ nnoremap <silent> <leader>r :<C-u>Unite -buffer-name=register register<CR>
 nnoremap <silent> <leader>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
 nnoremap <silent> <leader>a :<C-u>Unit BookmarkAdd<CR>
 nnoremap <silent> <leader>c :<C-u>Unit bookmark<CR>
-"nnoremap <F2> :VimFiler<CR>
+nnoremap <F2> :VimFiler<CR>
 "inoremap <silent> <C-s> <Esc>:Unite history/yank<CR>
 
 "--------------------------------------------------
@@ -348,12 +329,12 @@ augroup END
 "----------------------------------------
 " MarkDown
 "----------------------------------------
-" let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_folding_disabled=1
 "
-" augroup MarkdownKeyMap
-"    autocmd!
-"    autocmd BufRead,BufNewFile *.md  set filetype=markdown
-" augroup END
+augroup MarkdownKeyMap
+    autocmd!
+    autocmd BufRead,BufNewFile *.md  set filetype=markdown
+augroup END
 "
 " function! s:ExecShiba()
 "     let s:shiba_arg = 'c:/bin/shiba/shiba.exe --detach ' . expand('%') 
@@ -363,9 +344,9 @@ augroup END
 " "-- shibaで開く --
 " nnoremap <silent> ma :<C-u>call <SID>ExecShiba()<CR><CR>
 "
-" "-- htmlで開く(previm) --
-" let g:previm_enable_realtime = 1
-" nnoremap <silent> mp :PrevimOpen<CR>
+"-- htmlで開く(previm) --
+let g:previm_enable_realtime = 1
+nnoremap <silent> mp :PrevimOpen<CR>
 "
 
 "----------------------------------------
@@ -761,18 +742,18 @@ endfunction
 "----------------------------------------
 " Quick Run
 "----------------------------------------
-" noremap <silent>mn :w<CR>:QuickRun<CR>
-" "-- key ---
-"
-" "-- config --
-" let g:quickrun_config = {
-"\   "_" : {
-"\ 'runner'    : 'vimproc',
-"\ 'runner/vimproc/updatetime' : 1,
-"\       "outputter/buffer/split" : ":botright 8sp",
-"\       "hook/time/enable" : 1,
-"\   },
-"\}
+noremap <silent>mn :w<CR>:QuickRun<CR>
+"-- key ---
+
+"-- config --
+let g:quickrun_config = {
+\   "_" : {
+\ 'runner'    : 'vimproc',
+\ 'runner/vimproc/updatetime' : 1,
+\       "outputter/buffer/split" : ":botright 8sp",
+\       "hook/time/enable" : 1,
+\   },
+\}
 
 
 "----------------------------------------
@@ -934,3 +915,18 @@ noremap <leader>e :<C-u>call <SID>ExplorerCurrentDir()<CR><CR>
 " let g:Align_xstrlen=3
 "// Windowsでの設定例です。Mac他の場合は外部コマンド部分を読み替えてください。
 " au FileType plantuml command! OpenUml :!start chrome %
+
+
+" 保存時のみ実行する
+let g:ale_lint_on_text_changed = 0
+" 表示に関する設定
+let g:ale_sign_error = ''
+let g:ale_sign_warning = ''
+let g:airline#extensions#ale#open_lnum_symbol = '('
+let g:airline#extensions#ale#close_lnum_symbol = ')'
+let g:ale_echo_msg_format = '[%linter%]%code: %%s'
+highlight link ALEErrorSign Tag
+highlight link ALEWarningSign StorageClass
+" Ctrl + kで次の指摘へ、Ctrl + jで前の指摘へ移動
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
