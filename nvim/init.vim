@@ -1,276 +1,298 @@
-"----------------------------------------
-" initial settings
-"----------------------------------------
-if &compatible
-    set nocompatible "vi 互換じゃない
-endif
-
-"----------------------------------------
-" dein settings 
-"----------------------------------------
-"-- 初期設定 --
-let s:cache_home = empty($XDG_CACHE_HOME) ? expand('/cache') : $XDG_CACHE_HOME
-let s:dein_dir = s:cache_home .  '/dein'
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-
-"-- 自動インストール --
-if !isdirectory(s:dein_repo_dir)
-  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
-endif
-let &runtimepath = s:dein_repo_dir .",". &runtimepath
-"-- プラグイン読み込み＆キャッシュ作成 --
-let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
-if dein#load_state(s:dein_dir)
-    call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
-    call dein#load_toml(s:toml_file)
-    call dein#end()
-    call dein#save_state()
-endif
-
-"-- 不足プラグインの自動インストール --
-let g:vimproc#download_windows_dll = 1  "コンパイル済みdllの自動ダウンロード
-if has('vim_starting') && dein#check_install()
-    call dein#install()
-endif
-
-"----------------------------------------
-" ディレクトリ設定＆自動作成
-"----------------------------------------
-"-- ディレクトリ指定
-let  s:tmp_dir         = s:cache_home . '/tmp'
-let  s:local_dir       = s:cache_home . '/local'
-let  s:swap_dir        = s:tmp_dir    . '/swap'
-let  s:backup_dir      = s:tmp_dir    . '/backup'
-let  s:undo_dir        = s:tmp_dir    . '/undo'
-let  s:bookmark_dir    = s:local_dir  . '/bookmark'
-let  s:junkfile_dir    = s:local_dir  . '/junkfile'
-let  s:migemo_dict_dir = s:local_dir  . '/dict'
-let  s:howm_dir        = s:local_dir  . '/howm'
-
-"-- ディレクトリ確認と自動生成 --
-if !isdirectory(s:tmp_dir)
-    call mkdir(iconv(s:tmp_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:local_dir)
-    call mkdir(iconv(s:local_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:swap_dir)
-    call mkdir(iconv(s:swap_dir, &encoding, &termencoding), 'p')
-endif
-if !isdirectory(s:backup_dir)
-    call mkdir(iconv(s:backup_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:undo_dir)
-    call mkdir(iconv(s:undo_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:junkfile_dir)
-    call mkdir(iconv(s:junkfile_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:bookmark_dir)
-    call mkdir(iconv(s:bookmark_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:howm_dir)
-    call mkdir(iconv(s:howm_dir, &encoding, &termencoding), 'p')
-endif
-
-"-- ディレクトリの指定 --
-set noswapfile
-let &directory = s:swap_dir
-
-set backup
-let &backupdir = s:backup_dir
-
-if has('persistent_undo')
-    let &undodir = s:undo_dir
-    set undofile
-endif
-
-"----------------------------------------
-" オプション等
-"----------------------------------------
-set title                " 編集中のファイルをタイトルに表示"
-set number               " 行番号表示
-set hidden               " 編集中でもバッファを開く
-set columns=250          " ウインドウの高さ
-set lines=40             " コマンドラインの高さ(GUI使用時)
-set scrolloff=2          " 上下のスクロールしない高さ
-set autochdir            " 常にカレントバッファをルートに
-set shellslash           " pathのbackslash対応(Dos用)
-set shortmess+=I         " ウガンダ非表示
-set display=lastline     " 長い行もちゃんと表示
-set virtualedit+=block   " ビジュアルモードの矩形選択時に仮想編集できるようにする。
-set virtualedit+=all     " いくつかのモードで仮想編集できるようにする。
-set completeopt+=noinsert
-set backspace=2
-set noerrorbells "Beep音は鳴らさない
-set expandtab
-set shiftwidth=4
-set tabstop=4
-set autoindent
-filetype plugin indent on
-set wildmenu wildmode=list:longest,full "ワイルドメニュー設定
-set helplang=ja,en       "helpは日本語で 
-set pumheight=10
-
-if has("kaoriya")
-    set fileencodings=guess
-    set modeline
-else
-    set fileencodings=utf-8,cp932,euc-jp,sjis
-endif
-
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-
-"---Color Syntax---
-syntax on
-set background=dark
-colorscheme japanesque
-set termguicolors
-
-
-"---IMEのモードで色をかえる----
-" set imdisable
-set iminsert=0
-set imsearch=-1
-" augroup InsModeAu
-"     autocmd!
-"     autocmd InsertEnter,CmdwinEnter * set noimdisable
-"     autocmd InsertLeave,CmdwinLeave * set imdisable
-" augroup END
-"
-"
-"----AirLine------------
-set laststatus=2
-let g:airline_theme = 'molokai'
-"----対応する括弧をハイライト
-set showmatch
-" highlight MatchParen ctermfg=Red
-set matchtime=1 "マッチする括弧の表示時間 *0.1sec
-"-- viminfo --
-"[']: markのファイル履歴
-"["]: レジスタ行数
-"[:]: コマンド履歴
-"[n]: 保存ファイルの指定
-set viminfo='50,\"1000,:0,n/viminfo
-
-"----------------------------------------
-" フォント設定
-"----------------------------------------
-if has('win32')
-    " set guifont=MS_Gothic:h12:cSHIFTJIS    " Windows用
-    set guifont=Cica:h12    " Windows用
-    set linespace=1                        " 行間隔の設定
-    if has('kaoriya')
-        set ambiwidth=auto                 " 一部のUCS文字の幅を自動計測して決める
+    " ----------------------------------------
+    " initial settings
+    "----------------------------------------
+    if &compatible
+        set nocompatible "vi 互換じゃない
     endif
-endif
 
-"----------------------------------------
-" Mouse
-"----------------------------------------
-set mouse=a       " どのモードでもマウスを使えるようにする
-set nomousefocus  " マウスの移動でフォーカスを自動的に切替えない
-set nomousehide   " 入力時にマウスポインタを隠さない
-set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボードへ (:help guioptions_a)
+    "----------------------------------------
+    " dein settings 
+    "----------------------------------------
+    "-- 初期設定 --
+    let s:cache_home = empty($XDG_CACHE_HOME) ? expand('/cache') : $XDG_CACHE_HOME
+    let s:dein_dir = s:cache_home .  '/dein'
+    let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-"----------------------------------------
-" Python
-"----------------------------------------
-" 実行ファイルのフォルダにpython3を作りその中に関連ファイルを入れる設定
-set runtimepath+=$VIM
-" set pythonthreedll=$VIM/python3/python35.dll
-let g:python3_host_prog = 'python'
+    "-- 自動インストール --
+    if !isdirectory(s:dein_repo_dir)
+      call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
+    endif
+    let &runtimepath = s:dein_repo_dir .",". &runtimepath
+    "-- プラグイン読み込み＆キャッシュ作成 --
+    let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
+    if dein#load_state(s:dein_dir)
+        call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
+        call dein#load_toml(s:toml_file)
+        call dein#end()
+        call dein#save_state()
+    endif
 
-"----------------------------------------
-" Mapping無効化 Leader割当
-"----------------------------------------
-" * s : <Leader>として使う
-" * m : m[qwrtyuiop] 以外は別機能にMappingするため一旦初期化
-" * , : Howm Prefixとして使う
-"-- <Nop>に初期化 --
-nnoremap s <Nop>
-nnoremap m <Nop>
-nnoremap , <Nop>
+    "-- 不足プラグインの自動インストール --
+    let g:vimproc#download_windows_dll = 1  "コンパイル済みdllの自動ダウンロード
+    if has('vim_starting') && dein#check_install()
+        call dein#install()
+    endif
 
-"-- <Leader> <LocalLeader>設定 --
-let mapleader="s"
-let maplocalleader = "\<Space>"
+    "----------------------------------------
+    " ディレクトリ設定＆自動作成
+    "----------------------------------------
+    "-- ディレクトリ指定
+    let  s:tmp_dir         = s:cache_home . '/tmp'
+    let  s:local_dir       = s:cache_home . '/local'
+    let  s:swap_dir        = s:tmp_dir    . '/swap'
+    let  s:backup_dir      = s:tmp_dir    . '/backup'
+    let  s:undo_dir        = s:tmp_dir    . '/undo'
+    let  s:bookmark_dir    = s:local_dir  . '/bookmark'
+    let  s:junkfile_dir    = s:local_dir  . '/junkfile'
+    let  s:migemo_dict_dir = s:local_dir  . '/dict'
+    let  s:howm_dir        = s:local_dir  . '/howm'
 
-"----------------------------------------
-" Sub Mode
-"----------------------------------------
-let g:submode_timeoutlen = 10000            "submodeがautooffになる時間 基本OFFしない
-let g:submode_keep_leaving_key = 1          "他のキーが押された場合、コマンドとして実行する
+    "-- ディレクトリ確認と自動生成 --
+    if !isdirectory(s:tmp_dir)
+        call mkdir(iconv(s:tmp_dir, &encoding, &termencoding), 'p')
+    endif
 
-"----------------------------------------
-" Unite Denite
-"----------------------------------------
-"-- Unite Setting --
-let g:unite_enable_start_insert = 1
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_file_mru_limit = 200
-let g:unite_source_file_mru_filename_format = ':~:.' "最近開いたファイル 
-let g:unite_source_session_enable_auto_save = 1
-let g:unite_source_bookmark_directory = s:bookmark_dir
+    if !isdirectory(s:local_dir)
+        call mkdir(iconv(s:local_dir, &encoding, &termencoding), 'p')
+    endif
 
-"-- Mapping In Unite --
-augroup UniteKeyMap
-    autocmd!
-    autocmd FileType unite call s:unite_my_settings()
-augroup END
+    if !isdirectory(s:swap_dir)
+        call mkdir(iconv(s:swap_dir, &encoding, &termencoding), 'p')
+    endif
+    if !isdirectory(s:backup_dir)
+        call mkdir(iconv(s:backup_dir, &encoding, &termencoding), 'p')
+    endif
 
-function! s:unite_my_settings()
-    nmap <buffer> <ESC> <Plug>(unite_exit)
-    imap <buffer> jj <Plug>(unite_insert_leave)
-    " 入力モードのときctrl+wでバックスラッシュも削除
-    imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
-    nnoremap <silent><buffer><expr> s unite#smart_map('s', unite#do_action('split'))
-    inoremap <silent><buffer><expr> s unite#smart_map('s', unite#do_action('split'))
-    nnoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
-    inoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
-    nnoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
-    inoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
+    if !isdirectory(s:undo_dir)
+        call mkdir(iconv(s:undo_dir, &encoding, &termencoding), 'p')
+    endif
+
+    if !isdirectory(s:junkfile_dir)
+        call mkdir(iconv(s:junkfile_dir, &encoding, &termencoding), 'p')
+    endif
+
+    if !isdirectory(s:bookmark_dir)
+        call mkdir(iconv(s:bookmark_dir, &encoding, &termencoding), 'p')
+    endif
+
+    if !isdirectory(s:howm_dir)
+        call mkdir(iconv(s:howm_dir, &encoding, &termencoding), 'p')
+    endif
+
+    "-- ディレクトリの指定 --
+    set noswapfile
+    let &directory = s:swap_dir
+
+    set backup
+    let &backupdir = s:backup_dir
+
+    if has('persistent_undo')
+        let &undodir = s:undo_dir
+        set undofile
+    endif
+
+    "----------------------------------------
+    " オプション等
+    "----------------------------------------
+    set title                " 編集中のファイルをタイトルに表示"
+    set number               " 行番号表示
+    set hidden               " 編集中でもバッファを開く
+    set columns=250          " ウインドウの高さ
+    set lines=40             " コマンドラインの高さ(GUI使用時)
+    set scrolloff=2          " 上下のスクロールしない高さ
+"    set autochdir            " 常にカレントバッファをルートに
+    set shellslash           " pathのbackslash対応(Dos用)
+    set shortmess+=I         " ウガンダ非表示
+    set display=lastline     " 長い行もちゃんと表示
+    set virtualedit+=block   " ビジュアルモードの矩形選択時に仮想編集できるようにする。
+    set virtualedit+=all     " いくつかのモードで仮想編集できるようにする。
+    set completeopt+=noinsert
+    set backspace=2
+    set noerrorbells "Beep音は鳴らさない
+    set expandtab
+    set shiftwidth=4
+    set tabstop=4
+    set autoindent
+    filetype plugin indent on
+    set wildmenu wildmode=list:longest,full "ワイルドメニュー設定
+    set helplang=ja,en       "helpは日本語で 
+    set pumheight=10
+    if has("kaoriya")
+        set fileencodings=guess
+        set modeline
+    else
+        set fileencodings=utf-8,cp932,euc-jp,sjis
+    endif
+
+    " Use deoplete.
+    let g:deoplete#enable_at_startup = 1
+
+    set guioptions+=T
+    set guioptions+=m
+
+    "---Color Syntax---
+    syntax on
+    set background=dark
+    colorscheme japanesque
+    " colorscheme iceberg
+    set termguicolors
+
+
+    "---IMEのモードで色をかえる----
+    " set imdisable
+    set iminsert=0
+    set imsearch=-1
+    " augroup InsModeAu
+    "     autocmd!
+    "     autocmd InsertEnter,CmdwinEnter * set noimdisable
+    "     autocmd InsertLeave,CmdwinLeave * set imdisable
+    " augroup END
+    "
+    "
+    "----AirLine------------
+    set laststatus=2
+    let g:airline_theme = 'molokai'
+    "----対応する括弧をハイライト
+    set showmatch
+    " highlight MatchParen ctermfg=Red
+    set matchtime=1 "マッチする括弧の表示時間 *0.1sec
+    "-- viminfo --
+    "[']: markのファイル履歴
+    "["]: レジスタ行数
+    "[:]: コマンド履歴
+    "[n]: 保存ファイルの指定
+    set viminfo='50,\"1000,:0,n/viminfo
+
+    "----------------------------------------
+    " フォント設定
+    "----------------------------------------
+    if has('win32')
+        " set guifont=MS_Gothic:h12:cSHIFTJIS    " Windows用
+        set guifont=Cica:h12    " Windows用
+        set linespace=1                        " 行間隔の設定
+        if has('kaoriya')
+            set ambiwidth=auto                 " 一部のUCS文字の幅を自動計測して決める
+        endif
+    endif
+
+    "----------------------------------------
+    " Mouse
+    "----------------------------------------
+    set mouse=a       " どのモードでもマウスを使えるようにする
+    set nomousefocus  " マウスの移動でフォーカスを自動的に切替えない
+    set nomousehide   " 入力時にマウスポインタを隠さない
+    set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボードへ (:help guioptions_a)
+
+    "----------------------------------------
+    " Python
+    "----------------------------------------
+    " 実行ファイルのフォルダにpython3を作りその中に関連ファイルを入れる設定
+    set runtimepath+=$VIM
+    " set pythonthreedll=$VIM/python3/python35.dll
+    let g:python3_host_prog = 'c:\bin\Anaconda3\python'
+
+    "----------------------------------------
+    " Mapping無効化 Leader割当
+    "----------------------------------------
+    " * s : <Leader>として使う
+    " * m : m[qwrtyuiop] 以外は別機能にMappingするため一旦初期化
+    " * , : Howm Prefixとして使う
+    "-- <Nop>に初期化 --
+    nnoremap s <Nop>
+    nnoremap m <Nop>
+    nnoremap , <Nop>
+
+    "-- <Leader> <LocalLeader>設定 --
+    let mapleader="s"
+    let maplocalleader = "\<Space>"
+
+    "----------------------------------------
+    " Sub Mode
+    "----------------------------------------
+    let g:submode_timeoutlen = 10000            "submodeがautooffになる時間 基本OFFしない
+    let g:submode_keep_leaving_key = 1          "他のキーが押された場合、コマンドとして実行する
+
+    "----------------------------------------
+    " Unite Denite
+    "----------------------------------------
+    "-- Unite Setting --
+    let g:unite_enable_start_insert = 1
+    let g:unite_source_history_yank_enable = 1
+    let g:unite_source_file_mru_limit = 200
+    let g:unite_source_file_mru_filename_format = ':~:.' "最近開いたファイル 
+    let g:unite_source_session_enable_auto_save = 1
+    let g:unite_source_bookmark_directory = s:bookmark_dir
+
+    "-- Mapping In Unite --
+    augroup UniteKeyMap
+        autocmd!
+        autocmd FileType unite call s:unite_my_settings()
+    augroup END
+
+    function! s:unite_my_settings()
+        nmap <buffer> <ESC> <Plug>(unite_exit)
+        imap <buffer> jj <Plug>(unite_insert_leave)
+        " 入力モードのときctrl+wでバックスラッシュも削除
+        imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+        nnoremap <silent><buffer><expr> s unite#smart_map('s', unite#do_action('split'))
+        inoremap <silent><buffer><expr> s unite#smart_map('s', unite#do_action('split'))
+        nnoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
+        inoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
+        nnoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
+        inoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
+    endfunction
+
+    "-- Denite Setting --
+    let g:denite_enable_start_insert = 1
+
+
+    " Mapping In Denite
+"    call denite#custom#map('insert', 'jj', '<denite:enter_mode:normal>')
+"    call denite#custom#option('default', 'prompt', '>')
+"    call denite#custom#map('insert', "<Down>", '<denite:move_to_next_line>')
+"    call denite#custom#map('insert', "<Up>", '<denite:move_to_previous_line>')
+"    call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
+"    call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
+"    call denite#custom#map('insert', "<C-s>", '<denite:do_action:vsplit>')
+"    call denite#custom#map('normal', "t", '<denite:do_action:tabopen>')
+"    call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
+"    call denite#custom#map('normal', "s", '<denite:do_action:split>')
+" Define mappings
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
 endfunction
 
-"-- Denite Setting --
-let g:denite_enable_start_insert = 1
-
-" Mapping In Denite
-call denite#custom#map('insert', 'jj', '<denite:enter_mode:normal>')
-call denite#custom#option('default', 'prompt', '>')
-call denite#custom#map('insert', "<Down>", '<denite:move_to_next_line>')
-call denite#custom#map('insert', "<Up>", '<denite:move_to_previous_line>')
-call denite#custom#map('insert', "<C-t>", '<denite:do_action:tabopen>')
-call denite#custom#map('insert', "<C-v>", '<denite:do_action:vsplit>')
-call denite#custom#map('insert', "<C-s>", '<denite:do_action:vsplit>')
-call denite#custom#map('normal', "t", '<denite:do_action:tabopen>')
-call denite#custom#map('normal', "v", '<denite:do_action:vsplit>')
-call denite#custom#map('normal', "s", '<denite:do_action:split>')
-
-"-- KeyMapping --
-nnoremap <silent> <leader>h :<C-u>Unite file_mru<CR>
-nnoremap <silent> <leader>b :<C-u>Unite buffer<CR>
-nnoremap <silent> <leader>y :<C-u>Unite history/yank<CR>
-nnoremap <silent> <leader>Y :<C-u>Unite yankround<CR>
-nnoremap <silent> <leader>o :<C-u>Unite -vertical -winwidth=30 outline<CR>
-nnoremap <silent> <leader>O :<C-u>Unite -vertical -winwidth=30 -no-quit outline<CR>
-nnoremap <silent> <leader>w :<C-u>Unite window<CR>
-nnoremap <silent> <leader>t :<C-u>Unite tab<CR>
-nnoremap <silent> <leader>m :<C-u>Unite mark<CR>
-nnoremap <silent> <leader>M :<C-u>Unite mapping<CR>
-nnoremap <silent> <leader>s :<C-u>Unite session<CR>
-nnoremap <silent> <leader>r :<C-u>Unite -buffer-name=register register<CR>
-nnoremap <silent> <leader>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
-nnoremap <silent> <leader>a :<C-u>Unit BookmarkAdd<CR>
-nnoremap <silent> <leader>c :<C-u>Unit bookmark<CR>
-nnoremap <F2> :VimFiler<CR>
+    "-- KeyMapping --
+    nnoremap <silent> <leader>h :<C-u>Unite file_mru<CR>
+    nnoremap <silent> <leader>H :<C-u>Denite file_mru<CR>
+    
+    nnoremap <silent> <leader>b :<C-u>Unite buffer<CR>
+    nnoremap <silent> <leader>y :<C-u>Unite history/yank<CR>
+    nnoremap <silent> <leader>Y :<C-u>Unite yankround<CR>
+    nnoremap <silent> <leader>o :<C-u>Unite -vertical -winwidth=30 outline<CR>
+    nnoremap <silent> <leader>O :<C-u>Unite -vertical -winwidth=30 -no-quit outline<CR>
+    nnoremap <silent> <leader>w :<C-u>Unite window<CR>
+    nnoremap <silent> <leader>t :<C-u>Unite tab<CR>
+    nnoremap <silent> <leader>m :<C-u>Unite mark<CR>
+    nnoremap <silent> <leader>M :<C-u>Unite mapping<CR>
+    nnoremap <silent> <leader>S :<C-u>Unite session<CR>
+    nnoremap <silent> <leader>r :<C-u>Unite -buffer-name=register register<CR>
+    nnoremap <silent> <leader>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
+    nnoremap <silent> <leader>a :<C-u>Unit BookmarkAdd<CR>
+    nnoremap <silent> <leader>c :<C-u>Unit bookmark<CR>
+    nnoremap <F2> :VimFiler<CR>
 "inoremap <silent> <C-s> <Esc>:Unite history/yank<CR>
 
 "--------------------------------------------------
@@ -451,7 +473,7 @@ set backspace=indent,eol,start " 検索時にファイルの最後まで行っ�
 "     "let &migemodict = s:migemo_dict_dir
 "     let migemodict = s:migemo_dict_dir
 "     nnoremap /  :<C-u>set hlsearch<Return>g/
-"     nnoremap g/ :<C-u>set hlsearch<Return>/
+"     nnoremap g/ :<C-uss>set hlsearch<Return>/
 "     nnoremap ?  :<C-u>set hlsearch<Return>g?
 "     nnoremap g? :<C-u>set hlsearch<Return>?
 " endif
@@ -504,16 +526,28 @@ imap <C-S-CR> <Up><End><CR>
 "------------------------------------------------------------
 "-- Window移動 -- wのトルグ
 call submode#enter_with('win-mode', 'n', '', '<C-w>', '<Nop>')
+call submode#enter_with('win-mode', 'n', '','<Leader>s','<Nop>')
+call submode#leave_with('win-mode', 'n', '','<Space>')
 call submode#map('win-mode', 'n', '', 'w', '<C-w>w')
+call submode#map('win-mode', 'n', '', 's', '<C-w>w')
 call submode#map('win-mode', 'n', '', 'W', '<C-w>W')
+call submode#map('win-mode', 'n', '', 'S', '<C-w>W')
 call submode#map('win-mode', 'n', '', 'h', '<C-w>h')
+call submode#map('win-mode', 'n', '', '<Left>', '<C-w>h')
 call submode#map('win-mode', 'n', '', 'k', '<C-w>k')
+call submode#map('win-mode', 'n', '', '<Up>', '<C-w>k')
 call submode#map('win-mode', 'n', '', 'j', '<C-w>j')
+call submode#map('win-mode', 'n', '', '<Down>', '<C-w>j')
 call submode#map('win-mode', 'n', '', 'l', '<C-w>l')
+call submode#map('win-mode', 'n', '', '<Right>', '<C-w>l')
 call submode#map('win-mode', 'n', '', 'H', '<C-w>H')
+call submode#map('win-mode', 'n', '', '<S-Left>', '<C-w>H')
 call submode#map('win-mode', 'n', '', 'K', '<C-w>K')
+call submode#map('win-mode', 'n', '', '<S-Up>', '<C-w>K')
 call submode#map('win-mode', 'n', '', 'J', '<C-w>J')
+call submode#map('win-mode', 'n', '', '<S-Down>', '<C-w>J')
 call submode#map('win-mode', 'n', '', 'L', '<C-w>L')
+call submode#map('win-mode', 'n', '', '<S-Right>', '<C-w>L')
 call submode#map('win-mode', 'n', '', '>', '<C-w>>')
 call submode#map('win-mode', 'n', '', '<', '<C-w><')
 call submode#map('win-mode', 'n', '', '.', '<C-w>+')
@@ -595,11 +629,11 @@ endfunction
 "-- 全角スペースを表示-- 
 "CicaFontで見れるので変更
 "何をしているかわからないけどコピペ 
-"augroup ZenkakuSpace
-"    autocmd!
-"    autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
-"    augroup END
-"call ZenkakuSpace()
+augroup ZenkakuSpace
+    autocmd!
+    autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+    augroup END
+call ZenkakuSpace()
 
 
 "----------------------------------------
@@ -683,7 +717,7 @@ map H <Plug>(expand_region_shrink)
 " - 動作設定 -
 " 'ib' Support nesting of parentheses
 " 'iB' Support nesting of braces
-" 'il' inside line. https://github.com/kana/vim-textobj-line
+    " 'il' inside line. https://github.com/kana/vim-textobj-line
 " 'ie' entire file. https://github.com/kana/vim-textobj-entire
 let g:expand_region_text_objects = {
 \ 'iw' :0,
@@ -865,7 +899,11 @@ nmap k <Plug>(accelerated_gk)
 nmap j <Plug>(accelerated_gj)
 nmap l <Plug>(accelerated_l)
 nmap h <Plug>(accelerated_h)
-"
+vmap k <Plug>(accelerated_gk)gv
+vmap j <Plug>(accelerated_gj)gv
+vmap l <Plug>(accelerated_l)gv
+vmap h <Plug>(accelerated_h)gv
+""
 "-- <LL>j, <LL>kで加速 (J,Kでさらに加速)
 let s:move_jk_step_size = 15
 let s:move_jk_step_size_large = 45
@@ -937,3 +975,7 @@ highlight link ALEWarningSign StorageClass
 " Ctrl + kで次の指摘へ、Ctrl + jで前の指摘へ移動
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+let g:monster#comletion#backend = 'solargraph'
+
+let g:vim_markdown_math = 1
