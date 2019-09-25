@@ -1,64 +1,76 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ���g���̗J�T - dot.mayu
+# 窓使いの憂鬱 - dot.mayu
 # Copyright (C) 1999-2005, TAGA Nayuta <nayuta@users.sourceforge.net>
 #
-# �܂��L�[�{�[�h��`��ǂݍ���
-#if ( USE104 )
-#    include "104.mayu"		# 104 �L�[�{�[�h�ݒ�
-#    if ( USE109on104 )
-#        include "109on104.mayu"	# 104 �L�[�{�[�h�� 109 �L�[�{�[�h����
-#    endif
-#else
-#    include "109.mayu"		# 109 �L�[�{�[�h�ݒ�
-#    if ( USE104on109 )
-#        include "104on109.mayu"	# 109 �L�[�{�[�h�� 104 �L�[�{�[�h����
-#    endif
-#endif
+# まずキーボード定義を読み込む
+if ( USE104 )
+    include "104.mayu"		# 104 キーボード設定
+    if ( USE109on104 )
+        include "109on104.mayu"	# 104 キーボードを 109 キーボード風に
+    endif
+else
+    include "109.mayu"		# 109 キーボード設定
+    if ( USE104on109 )
+        include "104on109.mayu"	# 109 キーボードを 104 キーボード風に
+    endif
+endif
 
 if ( USEdefault )
-#    include	"default.mayu"	# Emacs ���C�N�Ȃ��܂��܂Ȑݒ�
+    include "default.mayu"	# Emacs ライクなさまざまな設定
 endif
-include "109.mayu"	# 109 �L�[�{�[�h�� 104 �L�[�{�[�h����
 
 keymap Global
+# ================ ここから Local Setting =============
+# --- SandS ---
+mod Shift += !!Space
+#
+#  --- Ctrlの追加（caplock と コロン) --- 
+## capslock -> control
+mod Control += E0英数
+mod Control += 英数 
+key *E0英数 =  *LControl
+key *英数   =  *LControl
+#:を押している時だけCtrlに
+mod Control += !!Colon
 
-#=======OneShot Mod====================================
-mod Shift += !!Space   #SandS
-#capslock -> control
-mod Control += �p��
-key *�p�� = *LControl
-mod Control += !!Colon #:��Ctrl��
+#  --- モデファイアーM0追加(変換 無変換) --- 
+mod mod0 += !!E0無変換
+mod mod0 += !!無変換
+mod mod0 += !!変換
 
-mod mod0 += !!���ϊ�
-mod mod0 += !!�ϊ�
+#  --- IMEの操作 変換=>トグル 無変換=>OFF --- 
+## VIM用に無変換はESCも追加で押す 他のアプリでぶつかるかも
+key *IC-*M0-*変換     = *&SetImeStatus(toggle)
+key *IC-*M0-*E0無変換 = *&SetImeStatus(off) *Escape
+key *IC-*M0-*無変換   = *&SetImeStatus(off) *Escape
 
-key *IC-*M0-*�ϊ� =  *&SetImeStatus(toggle)
-key *IC-*M0-���ϊ� = *&SetImeStatus(off) *Escape
+#  --- ウィンドウ操作 --- 
+key *IC-M0-C-H = *&WindowMove(-10,  0) # 左へ移動
+key *IC-M0-C-K = *&WindowMove(  0,-10) # 上へ移動
+key *IC-M0-C-J = *&WindowMove(  0, 10) # 下へ移動
+key *IC-M0-L = *&WindowMove( 10,  0) # 右へ移動
+key *IC-M0-O = A-TAB                 # 正順アプり切替え
+key *IC-M0-I = A-S-TAB               # 逆順アプリ切替え
+key *IC-M0-T = *&WindowClingToTop    # 上側をディスプレイ上辺へ寄せる
+key *IC-M0-B = *&WindowClingToBottom # 下側をディスプレイ下辺へ寄せる
+key *IC-M0-V = *&WindowHMaximize     # 上下方向最大化(トグル)
+key *IC-M0-S = *&WindowVMaximize     # 左右方向最大化(トグル)
+key *IC-M0-M = *&WindowMaximize      # 最大化(トグル)
 
-key M0-q = &LoadSetting # �ݒ�t�@�C���̓ǂݍ���
+key *IC-M0-H = LEFT  # 左へ移動
+key *IC-M0-K = UP    # 上へ移動
+key *IC-M0-J = DOWN  # 下へ移動
+key *IC-M0-L = RIGHT # 右へ移動
+# --- 特殊キーショートカット --- 
+key C-M      = ENTER
+key C-I      = TAB 
+key C-H      = BACKSPACE
+key *IC-M0-N = SPACE      #連打用
 
-key *IC-M0-h = *&WindowMove(-10,0)
-key *IC-M0-k = *&WindowMove(0,-10)
-key *IC-M0-j = *&WindowMove(0,10)
-# key *IC-M0-l = *&WindowMove(10,0)
-key *IC-M0-O = A-TAB
-key *IC-M0-I = A-S-TAB
-key *IC-M0-T = *&WindowClingToTop
-key *IC-M0-B = *&WindowClingToBottom
-key *IC-M0-V = *&WindowHMaximize
-key *IC-M0-S = *&WindowVMaximize
-key *IC-M0-M = *&WindowMaximize
+#  --- yamy設定ファイルリロード --- 
 key *IC-M0-R = *&LoadSetting
 
-key *IC-C-M0-h = S-LEFT
-
-key *IC-C-M0-k = S-UP
-key *IC-C-M0-j = S-DOWN
-key *IC-C-M0-l = S-RIGHT
+#  --- Clipbord呼び出し ---
+key *IC-M0-P = W-V
 
 
-
-
-key C-m = ENTER
-key C-i = TAB 
-key C-h = BACKSPACE 
