@@ -9,7 +9,8 @@ if ( USE104 )
         include "109on104.mayu"	# 104 キーボードを 109 キーボード風に
     endif
 else
-    include "109.mayu"		# 109 キーボード設定
+    include "109.mayu"# 109 キーボード設定
+    include "109.local.mayu"
     if ( USE104on109 )
         include "104on109.mayu"	# 109 キーボードを 104 キーボード風に
     endif
@@ -20,57 +21,5 @@ if ( USEdefault )
 endif
 
 keymap Global
-# ================ ここから Local Setting =============
-# --- SandS ---
-mod Shift += !!Space
-#
-#  --- Ctrlの追加（caplock と コロン) --- 
-## capslock -> control
-mod Control += E0英数
-mod Control += 英数 
-key *E0英数 =  *LControl
-key *英数   =  *LControl
-#:を押している時だけCtrlに
-mod Control += !!Colon
-
-#  --- モデファイアーM0追加(変換 無変換) --- 
-mod mod0 += !!E0無変換
-mod mod0 += !!無変換
-mod mod0 += !!変換
-
-#  --- IMEの操作 変換=>トグル 無変換=>OFF --- 
-## VIM用に無変換はESCも追加で押す 他のアプリでぶつかるかも
-key *IC-*M0-*変換     = *&SetImeStatus(toggle)
-key *IC-*M0-*E0無変換 = *&SetImeStatus(off) *Escape
-key *IC-*M0-*無変換   = *&SetImeStatus(off) *Escape
-
-#  --- ウィンドウ操作 --- 
-key *IC-M0-C-H = *&WindowMove(-10,  0) # 左へ移動
-key *IC-M0-C-K = *&WindowMove(  0,-10) # 上へ移動
-key *IC-M0-C-J = *&WindowMove(  0, 10) # 下へ移動
-key *IC-M0-L = *&WindowMove( 10,  0) # 右へ移動
-key *IC-M0-O = A-TAB                 # 正順アプり切替え
-key *IC-M0-I = A-S-TAB               # 逆順アプリ切替え
-key *IC-M0-T = *&WindowClingToTop    # 上側をディスプレイ上辺へ寄せる
-key *IC-M0-B = *&WindowClingToBottom # 下側をディスプレイ下辺へ寄せる
-key *IC-M0-V = *&WindowHMaximize     # 上下方向最大化(トグル)
-key *IC-M0-S = *&WindowVMaximize     # 左右方向最大化(トグル)
-key *IC-M0-M = *&WindowMaximize      # 最大化(トグル)
-
-key *IC-M0-H = LEFT  # 左へ移動
-key *IC-M0-K = UP    # 上へ移動
-key *IC-M0-J = DOWN  # 下へ移動
-key *IC-M0-L = RIGHT # 右へ移動
-# --- 特殊キーショートカット --- 
-key C-M      = ENTER
-key C-I      = TAB 
-key C-H      = BACKSPACE
-key *IC-M0-N = SPACE      #連打用
-
-#  --- yamy設定ファイルリロード --- 
-key *IC-M0-R = *&LoadSetting
-
-#  --- Clipbord呼び出し ---
-key *IC-M0-P = W-V
 
 

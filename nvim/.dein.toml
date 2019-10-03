@@ -275,3 +275,6 @@ hook_add = '''
 '''
 
 #repo = "neoclide/coc-solargraph"
+ # [[plugins]]
+ # repo = "ueokande/popupdict.vim"
+

@@ -1,6 +1,14 @@
-    " ----------------------------------------
+"
+"
+" #migemo
+"
+"
+"
+"
+"
+    " --------------------------------------
     " initial settings
-    "----------------------------------------
+    " --------------------------------------
     if &compatible
         set nocompatible "vi 互換じゃない
     endif
@@ -102,7 +110,7 @@
     set scrolloff=2          " 上下のスクロールしない高さ
 "    set autochdir            " 常にカレントバッファをルートに
     set shellslash           " pathのbackslash対応(Dos用)
-    set shortmess+=I         " ウガンダ非表示
+    " set shortmess+=I         " ウガンダ非表示
     set display=lastline     " 長い行もちゃんと表示
     set virtualedit+=block   " ビジュアルモードの矩形選択時に仮想編集できるようにする。
     set virtualedit+=all     " いくつかのモードで仮想編集できるようにする。
@@ -126,15 +134,13 @@
 
     " Use deoplete.
     let g:deoplete#enable_at_startup = 1
-
-    set guioptions+=T
+    " set guioptions+=T
     set guioptions+=m
 
     "---Color Syntax---
     syntax on
     set background=dark
     colorscheme japanesque
-    " colorscheme iceberg
     set termguicolors
 
 
@@ -210,7 +216,8 @@
     " Sub Mode
     "----------------------------------------
     let g:submode_timeoutlen = 10000            "submodeがautooffになる時間 基本OFFしない
-    let g:submode_keep_leaving_key = 1          "他のキーが押された場合、コマンドとして実行する
+    let g:submode_keep_leaving_key   = 1        "他のキーが押された場合、コマンドとして実行する
+    let g:submode_always_show_subode = 1        "Submode中は常にモードを表示
 
     "----------------------------------------
     " Unite Denite
@@ -300,29 +307,32 @@ endfunction
 "--------------------------------------------------
 " * UNDO履歴をまとめて一回でできるように
 " * yankさせない
-" * <c-h>はNomalModeでも<X>と同じく文字消去
+" * <>はNomalModeでも<X>と同じく文字消去
 
-function! s:my_x()
-    undojoin
-    normal! "_x
-endfunction
-
-function! s:my_X()
+function! s:bs_in_bulk()
     undojoin
     normal! "_X
 endfunction
 
-nnoremap <silent> <Plug>(my-x) :<C-u>call <SID>my_x()<CR>
-nnoremap <silent> <Plug>(my-X) :<C-u>call <SID>my_X()<CR>
+nnoremap <silent> <Plug>(bs-in-bulk)  :<C-u>call <SID>bs_in_bulk()<CR>
+call submode#enter_with('bs_in_bulk', 'n', 's',  'X'           ,'"_X')
+call submode#enter_with('bs_in_bulk', 'n', 's',  '<backspace>' ,'"_X')
+call submode#map(       'bs-in-bulk', 'n', 'sr', 'X'           ,'<Plug>(bs-in-bulk)')
+call submode#map(       'bs-in-bulk', 'n', 'sr', '<backspace>' ,'<Plug>(bs-in-bulk)')
 
-call submode#enter_with('my-xX', 'n', 's', 'x'     ,'"_x')
-call submode#enter_with('my-xX', 'n', 's', 'X'     ,'"_X')
-call submode#enter_with('my-xX', 'n', 's', '<C-H>' ,'"_X')
-call submode#map('my-xX', 'n', 'rs', 'x'     ,'<Plug>(my-x)')
-call submode#map('my-xX', 'n', 'rs', 'X'     ,'<Plug>(my-X)')
-call submode#map('my-xX', 'n', 'rs', '<C-H>' ,'<Plug>(my-X)')
+function! s:del_in_bulk()
+    undojoin
+    normal! "_x
+endfunction
 
-"--------------------------------------------------
+nnoremap <silent> <Plug>(del-in-bulk) :<C-u>call <SID>del_in_bulk()<CR>
+call submode#enter_with('del-in-bulk', 'n', 's',  'x'         ,'"_x')
+call submode#enter_with('del-in-bulk', 'n', 's',  '<delete>'  ,'"_x')
+call submode#map(       'del-in-bulk', 'n', 'sr', 'x'         ,'<Plug>(del_in_bulk)')
+call submode#map(       'del-in-bulk', 'n', 'sr', '<delete>'  ,'<Plug>(del-in-bulk)')
+
+
+"-------------------------------------------------
 " コマンドライン拡張
 "--------------------------------------------------
 "  ':'        --> OverCommandLine
@@ -528,9 +538,7 @@ imap <C-S-CR> <Up><End><CR>
 call submode#enter_with('win-mode', 'n', '', '<C-w>', '<Nop>')
 call submode#enter_with('win-mode', 'n', '','<Leader>s','<Nop>')
 call submode#leave_with('win-mode', 'n', '','<Space>')
-call submode#map('win-mode', 'n', '', 'w', '<C-w>w')
 call submode#map('win-mode', 'n', '', 's', '<C-w>w')
-call submode#map('win-mode', 'n', '', 'W', '<C-w>W')
 call submode#map('win-mode', 'n', '', 'S', '<C-w>W')
 call submode#map('win-mode', 'n', '', 'h', '<C-w>h')
 call submode#map('win-mode', 'n', '', '<Left>', '<C-w>h')
@@ -557,7 +565,7 @@ call submode#map('win-mode', 'n', '', '-', '<C-w>-')
 call submode#map('win-mode', 'n', '', 'r', '<C-w>r')
 call submode#map('win-mode', 'n', '', '=', '<C-w>=')
 call submode#map('win-mode', 'n', '', '0', '<C-w>=')
-call submode#map('win-mode', 'n', 'rsx', 's', ':Unite window')
+call submode#map('win-mode', 'n', 'rs', 'w', '<CR>:Unite window')
 "-- Window分割
 nnoremap <LocalLeader>s :<C-u>sp<CR>
 nnoremap <LocalLeader>v :<C-u>vs<CR>
@@ -782,8 +790,6 @@ endfunction
 "----------------------------------------
 " Quick Run
 "----------------------------------------
-noremap <silent>mn :w<CR>:QuickRun<CR>
-noremap <silent><F8> :w<CR>:QuickRun<CR>
 "-- key ---
 
 "-- config --
@@ -796,6 +802,9 @@ let g:quickrun_config = {
 \   },
 \}
 
+let g:quickrun_config.haskell = {'command': 'stack',
+                                \'cmdopt': 'runhaskell',
+                                \}
 
 "----------------------------------------
 " コメント(caw.vim)
@@ -932,7 +941,7 @@ call submode#map('move-l-tail', 'nv', '', 'l'  ,'$')
 "-- file encodeing --
 "
 "-- modifiable
-nnoremap  <LocalLeader>m :set modifiable!<CR>
+nnoremap  <LocalLeader>m :set modifiable!<CR> :set modifiable<CR>
 "----------------------------------------
 " explorer.exeの実行
 "----------------------------------------
@@ -977,5 +986,8 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 let g:monster#comletion#backend = 'solargraph'
-
 let g:vim_markdown_math = 1
+
+nmap <Leader>n :source %<CR><CR>
+nmap <Leader>p :echo 1<CR>
+
