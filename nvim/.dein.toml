@@ -18,6 +18,12 @@ repo = 'Shougo/unite-session'
 
 # [[plugins]]
 # repo = 'haya14busa/vim-migemo'
+[[plugins]]
+repo = 'haya14busa/incsearch.vim'
+[[plugins]]
+repo = 'haya14busa/incsearch-migemo.vim'
+# [[plugins]]
+# repo = 'haya14busa/incsearch-fuzzy.vim'
 
 [[plugins]]
 repo    = 'vim-airline/vim-airline'
@@ -29,9 +35,6 @@ repo = 'vim-airline/vim-airline-themes'
 [[plugins]]
 # repo = 'mo-ta/vim-colors-mota'
 repo = 'aereal/vim-colors-japanesque'
-
-[[plugins]]
-repo = 'cocopon/iceberg.vim'
 
 # [[plugins]]
 # repo = 'fuenor/qfixhowm'
@@ -77,15 +80,14 @@ repo = 'Shougo/unite-outline'
 repo = 'cespare/vim-toml'
 on_ft = 'toml'
 
-[[plugins]]
-repo = 'Shougo/vimfiler'
+# [[plugins]]
+# repo = 'Shougo/vimfiler'
 
 [[plugins]]
 repo =  'kannokanno/previm'
 
 [[plugins]]
-repo = 'plasticboy/vim-markdown'
-# repo = 'tpope/vim-markdown'
+repo = 'tpope/vim-markdown'
 
 [[plugins]]
 repo =  'tyru/open-browser.vim'
@@ -106,8 +108,8 @@ repo = 'mo-ta/accelerated-jk'
 [[plugins]]
 repo = 'sgur/unite-qf'
 
-# [[plugins]]
-# repo = 'sjl/gundo.vim'
+[[plugins]]
+repo = 'sjl/gundo.vim'
 
 
 # [[plugins]]
@@ -245,36 +247,12 @@ repo = 'mechatroner/rainbow_csv'
 repo = "pepo-le/win-ime-con.nvim"
 
 [[plugins]]
+repo = "zah/nim.vim"
+[[plugins]]
 repo = "w0rp/ale"
-
-#undoList表示
 [[plugins]]
 repo = "mbbill/undotree"
 
 [[plugins]]
-repo = "neoclide/coc.nvim"
-build = 'coc#util#install()'
-hook_add = '''
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-  " Remap for rename current word
-  nmap <leader>rn <Plug>(coc-rename)
-  " Highlight symbol under cursor on CursorHold
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-  " Use K for show documentation in preview window
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
-  function! s:show_documentation()
-    if &filetype == 'vim'
-      execute 'h '.expand('<cword>')
-    else
-      call CocAction('doHover')
-    endif
-  endfunction
-'''
-
-#repo = "neoclide/coc-solargraph"
- # [[plugins]]
- # repo = "ueokande/popupdict.vim"
+repo = "nathanaelkane/vim-indent-guides"
 
