@@ -110,7 +110,7 @@ set virtualedit+=block   " ビジュアルモードの矩形選択時に仮想�
 set virtualedit+=all     " いくつかのモードで仮想編集できるようにする。
 set completeopt+=noinsert
 set backspace=2
-set noerrorbells "Beep音は鳴らさない
+set noerrorbells         " Beep音は鳴らさない
 set expandtab
 set shiftwidth=4
 set tabstop=4
@@ -119,6 +119,7 @@ filetype plugin indent on
 set wildmenu wildmode=list:longest,full "ワイルドメニュー設定
 set helplang=ja,en       "helpは日本語で 
 set pumheight=10
+set inccommand=split     " 置換をインタラクティブに表示
 
 if has("kaoriya")
     set fileencodings=guess
@@ -165,14 +166,10 @@ set viminfo='50,\"1000,:0,n/viminfo
 "----------------------------------------
 " フォント設定
 "----------------------------------------
-if has('win32')
-    " set guifont=MS_Gothic:h12:cSHIFTJIS    " Windows用
-    set guifont=Cica:h12    " Windows用
-    set linespace=1                        " 行間隔の設定
-    if has('kaoriya')
-        set ambiwidth=auto                 " 一部のUCS文字の幅を自動計測して決める
-    endif
-endif
+set guifont=Cica:h12    " Windows用
+set linespace=1         " 行間隔の設定
+set ambiwidth=double    " 一部のUCS文字の幅を自動計測して決める
+
 
 "----------------------------------------
 " Mouse
@@ -284,18 +281,18 @@ nnoremap <F2> :VimFiler<CR>
 " * yankさせない
 " * <c-h>はNomalModeでも<X>と同じく文字消去
 
-function! s:my_x()
+function! s:unify_x()
     undojoin
     normal! "_x
 endfunction
 
-function! s:my_X()
+function! s:unify_X()
     undojoin
     normal! "_X
 endfunction
 
-nnoremap <silent> <Plug>(my-x) :<C-u>call <SID>my_x()<CR>
-nnoremap <silent> <Plug>(my-X) :<C-u>call <SID>my_X()<CR>
+nnoremap <silent> <Plug>(unify-x) :<C-u>call <SID>unify_x()<CR>
+nnoremap <silent> <Plug>(unify-X) :<C-u>call <SID>unify_X()<CR>
 
 call submode#enter_with('my-xX', 'n', 's', 'x'     ,'"_x')
 call submode#enter_with('my-xX', 'n', 's', 'X'     ,'"_X')
@@ -307,8 +304,7 @@ call submode#map('my-xX', 'n', 'rs', '<C-H>' ,'<Plug>(my-X)')
 "--------------------------------------------------
 " コマンドライン拡張
 "--------------------------------------------------
-"  ':'        --> OverCommandLine
-"  '::'       --> 通常
+"  ':'       --> 通常
 "  '<SPACE>:' --> OutputRegister(出力をレジスタ保存)
 
 "-- OutputRegister --
@@ -317,9 +313,6 @@ command! -nargs=* -complete=command
 \   redir @*
 \|  execute <q-args>
 \|  redir END
-
-noremap :: :OverCommandLine<CR>
-" noremap : :
 noremap <LocalLeader>: :<C-u>OutputRegister :
 
 "--------------------------------------------------
@@ -415,7 +408,7 @@ call submode#enter_with('yankround', 'n', 'rs', 'gp' ,'<Plug>(yankround-gp)')
 call submode#enter_with('yankround', 'n', 'rs', 'gP' ,'<Plug>(yankround-gP)')
 call submode#map('yankround', 'n', 'r', 'p', '<Plug>(yankround-prev)')
 call submode#map('yankround', 'n', 'r', 'P', '<Plug>(yankround-next)')
-
+let g:highlightedyank_highlight_duration = 500
 "----------------------------------------
 " howm
 "----------------------------------------
@@ -476,8 +469,8 @@ map g/ <Plug>(incsearch-migemo-stay)
 " 行操作コマンド
 "------------------------------------------------------------
 "-- 行ごと移動(VisualModeでは複数行まとめて) --
-nnoremap <C-Down> "zdd"zp
 nnoremap <C-Up> "zdd<Up>"zP
+nnoremap <C-Down> "zdd"zp
 vnoremap <C-Up> "zx<Up>"zP`[V`]
 vnoremap <C-Down> "zx"zp`[V`]
 
@@ -544,57 +537,15 @@ nnoremap <LocalLeader>T :<C-u>tabnew<CR>
 " Undo 設定
 "------------------------------------------------------------
 set undofile "Undo情報をファイルに記録
-
-"-- GUndo --
-let g:gundo_auto_preview =   0
-let g:gundo_prefer_python3 = 1
-nnoremap <silent> <leader>u :<C-u>UndotreeToggle<CR>
-
-"-- UndoTree ---
 let g:undotree_SetFocusWhenToggle =  1
-nnoremap <silent> <F7> :<C-u>GundoToggle<CR>
-
-"-- ClearUndo--
-command! -bar ClearUndo  call s:clear_undo()
-function! s:clear_undo() abort
-    let old_undolevels = &undolevels
-    setlocal undolevels=-1
-    execute "normal! a \<BS>\<Esc>"
-    let &l:undolevels = old_undolevels
-    echo "Clear undo info."
-endfunction
-
-nnoremap <LocalLeader>U :<C-u>ClearUndo<CR>
-
-
-
+nnoremap <silent> <leader>u :<C-u>UndotreeToggle<CR>
 
 "------------------------------------------------------------
 " 不可視文字の可視化
 "------------------------------------------------------------
-" * Tab、全角スペース、行末のスペースを可視化する
-" * Tab 行末のスペースは Syntax Specialkeyで指定する
-" * 全角スペースは Syntax ZenkakuSpaceで指定できるようにしたつもり
-"sample :teb =>	:全角スペース:　行末のスペース: 
-
 "-- Tab、行末の半角スペース(SpecialKey) --
 set list
 set listchars=tab:^\ ,trail:~
-
-"-- ZenkakuSpace --
-function! ZenkakuSpace()
-    highlight ZenkakuSpace cterm=underline ctermfg=white gui=underline guifg=yellow
-endfunction
-
-"-- 全角スペースを表示-- 
-"CicaFontで見れるので廃止
-"何をしているかわからないけどコピペ 
-"augroup ZenkakuSpace
-"    autocmd!
-"    autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
-"    augroup END
-"call ZenkakuSpace()
-
 
 "----------------------------------------
 " endwise
@@ -627,7 +578,7 @@ nnoremap <C-t> <Left>"zx"pz
 nnoremap Y y$
 
 
-"-- 一単語をヤンクしてきた文字列を置きかえ<Normal> --
+"-- 一単語をヤンクされた文字列を置きかえ<Normal> --
 nnoremap ciy ciw<C-r>0<ESC><Right>
 nnoremap ciY ciW<C-r>0<ESC><Right>
 
@@ -659,15 +610,15 @@ vnoremap <S-Right> <Right>
 vnoremap <silent>v :<C-u>call <SID>vmode_toggle()<CR>
 
 function! s:vmode_toggle()
-   let l:vmode_now = visualmode()
-   if     l:vmode_now ==# 'v'
-       call feedkeys('gvV', "n")
-   elseif l:vmode_now ==# 'V'
-       call feedkeys("gv\<C-v>", "n") 
-   elseif l:vmode_now == "\<C-v>"
-       call feedkeys('gvv', "n")
-   else
-   endif
+    let l:vmode_now = visualmode()
+    if     l:vmode_now ==# 'v'
+        call feedkeys('gvV', "n")
+    elseif l:vmode_now ==# 'V'
+        call feedkeys("gv\<C-v>", "n")
+    elseif l:vmode_now == "\<C-v>"
+        call feedkeys('gvv', "n")
+    else
+    endif
 endfunction
 
 "-- vim-expand-region --
@@ -750,13 +701,14 @@ noremap <silent><F8> :w<CR>:QuickRun<CR>
 
 "-- config --
 "
+"
 let g:quickrun_config = {
-\   "_" : {
-\ 'runner'    : 'vimproc',
-\ 'runner/vimproc/updatetime' : 1,
-\       "outputter/buffer/split" : ":botright 8sp",
-\       "hook/time/enable" : 1,
-\   },
+    \"_" : {
+                \'runner' : 'vimproc',
+                \'runner/vimproc/updatetime' : 1,
+                \"outputter/buffer/split" : ":botright 8sp",
+                \"hook/time/enable" : 1,
+          \},
 \}
 
 if !exists('g:quickrun_config')
@@ -947,10 +899,5 @@ highlight link ALEWarningSign StorageClass
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_auto_colors = 1
-" :IndentGuidesEnable
-" :IndentGuidesDisenable
-" :IndentGuidesToggle
-
+let g:indentLine_enable = 1
 

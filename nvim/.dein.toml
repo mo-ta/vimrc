@@ -92,8 +92,6 @@ repo = 'tpope/vim-markdown'
 [[plugins]]
 repo =  'tyru/open-browser.vim'
 
-[[plugins]]
-repo =  'osyo-manga/vim-over'
 
 [[plugins]]
 repo = 'LeafCage/yankround.vim'
@@ -107,9 +105,6 @@ repo = 'mo-ta/accelerated-jk'
 
 [[plugins]]
 repo = 'sgur/unite-qf'
-
-[[plugins]]
-repo = 'sjl/gundo.vim'
 
 
 # [[plugins]]
@@ -248,11 +243,23 @@ repo = "pepo-le/win-ime-con.nvim"
 
 [[plugins]]
 repo = "zah/nim.vim"
+
 [[plugins]]
 repo = "w0rp/ale"
+
 [[plugins]]
 repo = "mbbill/undotree"
 
 [[plugins]]
-repo = "nathanaelkane/vim-indent-guides"
+repo = "Yggdroot/indentLine"
+
+[[plugins]]
+repo = "machakann/vim-highlightedyank"
+
+[[plugins]]
+repo = "itchyny/vim-parenmatch"
+
+
+
+
 
