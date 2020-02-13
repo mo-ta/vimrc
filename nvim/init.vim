@@ -3,10 +3,7 @@
 "
 "----------------------------------------
 " initial settings
-"----------------------------------------
-if &compatible
-    set nocompatible "vi 互換じゃない
-endif
+set nocompatible   " vi 互換じゃない
 
 "----------------------------------------
 " dein settings 
@@ -49,6 +46,12 @@ let  s:bookmark_dir    = s:local_dir  . '/bookmark'
 let  s:junkfile_dir    = s:local_dir  . '/junkfile'
 let  s:howm_dir        = s:local_dir  . '/howm'
 
+let s:dirs = { 
+      \ "tmp"    :  s:cache_home . '/tmp',
+      \ "local"  :  s:cache_home . '/local'
+      \}
+
+echo s:dirs
 "-- ディレクトリ確認と自動生成 --
 if !isdirectory(s:tmp_dir)
     call mkdir(iconv(s:tmp_dir, &encoding, &termencoding), 'p')
@@ -96,38 +99,31 @@ endif
 "----------------------------------------
 " オプション等
 "----------------------------------------
-set title                " 編集中のファイルをタイトルに表示"
-set number               " 行番号表示
-set hidden               " 編集中でもバッファを開く
-set columns=250          " ウインドウの高さ
-set lines=40             " コマンドラインの高さ(GUI使用時)
-set scrolloff=2          " 上下のスクロールしない高さ
-set autochdir            " 常にカレントバッファをルートに
-set shellslash           " pathのbackslash対応(Dos用)
-set shortmess+=I         " ウガンダ非表示
-set display=lastline     " 長い行もちゃんと表示
-set virtualedit+=block   " ビジュアルモードの矩形選択時に仮想編集できるようにする。
-set virtualedit+=all     " いくつかのモードで仮想編集できるようにする。
-set completeopt+=noinsert
-set backspace=2
-set noerrorbells         " Beep音は鳴らさない
-set expandtab
-set shiftwidth=4
-set tabstop=4
+set title                     " 編集中のファイルをタイトルに表示
+set number                    " 行番号表示
+set hidden                    " 編集中でもバッファを開く
+set columns=999               " ウインドウの幅さ
+set lines=999                  " ウインドウ高さ
+set scrolloff=2               " 上下のスクロールしない高さ
+set autochdir                 " 常にカレントバッファをルートに
+set shellslash                " pathのbackslash対応(Dos用)
+set shortmess+=I              " ウガンダ非表示
+set display=lastline          " 長い行もちゃんと表示
+set virtualedit+=block        " ビジュアルモードの矩形選択時に仮想編集できるようにする
+set virtualedit+=all          " いくつかのモードで仮想編集できるようにする
+" set completeopt+=noinsert
+set backspace=2               " <BS>キーで全部(字下げや改行)消去できる。
+set noerrorbells              " Beep音なし
+set expandtab                 " タブ入力でSpaceに置き換わる
+set shiftwidth=2              " 自動シフトでのシフト量
+set tabstop=2                 " タブのシフト量
 set autoindent
-filetype plugin indent on
+filetype plugin indent on     
 set wildmenu wildmode=list:longest,full "ワイルドメニュー設定
-set helplang=ja,en       "helpは日本語で 
+set helplang=ja,en            " helpは日本語優先
 set pumheight=10
 set inccommand=split     " 置換をインタラクティブに表示
-
-if has("kaoriya")
-    set fileencodings=guess
-    set modeline
-else
-    set fileencodings=utf-8,cp932,euc-jp,sjis
-endif
-
+set fileencodings=utf-8,cp932,euc-jp,sjis
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 
@@ -135,6 +131,7 @@ let g:deoplete#enable_at_startup = 1
 syntax on
 set background=dark
 colorscheme japanesque
+colorscheme novum
 set termguicolors
 
 
@@ -171,7 +168,6 @@ set linespace=1         " 行間隔の設定
 set ambiwidth=double    " 一部のUCS文字の幅を自動計測して決める
 
 
-"----------------------------------------
 " Mouse
 "----------------------------------------
 set mouse=a       " どのモードでもマウスを使えるようにする
@@ -294,12 +290,12 @@ endfunction
 nnoremap <silent> <Plug>(unify-x) :<C-u>call <SID>unify_x()<CR>
 nnoremap <silent> <Plug>(unify-X) :<C-u>call <SID>unify_X()<CR>
 
-call submode#enter_with('my-xX', 'n', 's', 'x'     ,'"_x')
-call submode#enter_with('my-xX', 'n', 's', 'X'     ,'"_X')
-call submode#enter_with('my-xX', 'n', 's', '<C-H>' ,'"_X')
-call submode#map('my-xX', 'n', 'rs', 'x'     ,'<Plug>(my-x)')
-call submode#map('my-xX', 'n', 'rs', 'X'     ,'<Plug>(my-X)')
-call submode#map('my-xX', 'n', 'rs', '<C-H>' ,'<Plug>(my-X)')
+call submode#enter_with('unify-xX', 'n', 's', 'x'     ,'"_x')
+call submode#enter_with('unify-xX', 'n', 's', 'X'     ,'"_X')
+call submode#enter_with('unify-xX', 'n', 's', '<C-H>' ,'"_X')
+call submode#map('unify-xX', 'n', 'rs', 'x'     ,'<Plug>(unify-x)')
+call submode#map('unify-xX', 'n', 'rs', 'X'     ,'<Plug>(unify-X)')
+call submode#map('unify-xX', 'n', 'rs', '<C-H>' ,'<Plug>(unify-X)')
 
 "--------------------------------------------------
 " コマンドライン拡張
@@ -599,7 +595,7 @@ call submode#map('jump-modify', 'n', '', 'o', 'g;')
 nnoremap <S-Up>    v<Up>
 nnoremap <S-Down>  v<Down>
 nnoremap <S-Left>  v<Left>
-noremap <S-Right> v<Right>
+nnoremap <S-Right> v<Right>
 
 vnoremap <S-Up>    <Up>
 vnoremap <S-Down>  <Down>
@@ -664,13 +660,13 @@ call submode#map('jump-markpos', 'n', 'r', 'i', '[`')
 call submode#map('jump-markpos', 'n', 'rs', 'm', '<CR>:Unite mark<CR>')
 "-- 手動で使う分をmap --
 "
-noremap mq mq
-noremap mw mw
-noremap me me
-noremap mr mr
-noremap mt mt
-noremap my my
-noremap mu mu
+nnoremap mq mq:echo 'marked q'<CR>
+nnoremap mw mw:echo 'marked w'<CR>
+nnoremap me me:echo 'marked e'<CR>
+nnoremap mr mr:echo 'marked r'<CR>
+nnoremap mt mt:echo 'marked t'<CR>
+nnoremap my my:echo 'marked y'<CR>
+nnoremap mu mu:echo 'marked u'<CR>
 
 "-- asd...kl に割振り ---
 let s:markrement_chars = "asdfghjkl"

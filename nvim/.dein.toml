@@ -32,6 +32,13 @@ depends = ['vim-airline-themes']
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 
+
+[[plugins]]
+repo = 'tlhr/anderson.vim'
+
+[[plugins]]
+repo = 'dylnmc/novum.vim'
+
 [[plugins]]
 # repo = 'mo-ta/vim-colors-mota'
 repo = 'aereal/vim-colors-japanesque'
