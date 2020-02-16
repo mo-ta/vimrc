@@ -17,7 +17,7 @@ repo = 'Shougo/unite-session'
 # repo = 'osyo-manga/vim-vigemo'
 
 # [[plugins]]
-# repo = 'haya14busa/vim-migemo'
+# reco = 'haya14busa/vim-migemo'
 [[plugins]]
 repo = 'haya14busa/incsearch.vim'
 [[plugins]]
@@ -32,7 +32,6 @@ depends = ['vim-airline-themes']
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 
-
 [[plugins]]
 repo = 'tlhr/anderson.vim'
 
@@ -42,6 +41,8 @@ repo = 'dylnmc/novum.vim'
 [[plugins]]
 # repo = 'mo-ta/vim-colors-mota'
 repo = 'aereal/vim-colors-japanesque'
+
+
 
 # [[plugins]]
 # repo = 'fuenor/qfixhowm'
@@ -266,7 +267,11 @@ repo = "machakann/vim-highlightedyank"
 [[plugins]]
 repo = "itchyny/vim-parenmatch"
 
+[[plugins]]
+repo = 'ncm2/float-preview.nvim.git'
 
+[[plugins]]
+repo = 'Shougo/vinarise'
 
 
 

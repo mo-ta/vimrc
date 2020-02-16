@@ -4,7 +4,6 @@
 "----------------------------------------
 " initial settings
 set nocompatible   " vi 互換じゃない
-
 "----------------------------------------
 " dein settings 
 "----------------------------------------
@@ -84,7 +83,7 @@ if !isdirectory(s:howm_dir)
     call mkdir(iconv(s:howm_dir, &encoding, &termencoding), 'p')
 endif
 
-"-- ディレクトリの指定 --
+"-- ディレクトリの指定
 set noswapfile
 let &directory = s:swap_dir
 
@@ -103,9 +102,9 @@ set title                     " 編集中のファイルをタイトルに表示
 set number                    " 行番号表示
 set hidden                    " 編集中でもバッファを開く
 set columns=999               " ウインドウの幅さ
-set lines=999                  " ウインドウ高さ
+set lines=999                 " ウインドウ高さ
 set scrolloff=2               " 上下のスクロールしない高さ
-set autochdir                 " 常にカレントバッファをルートに
+" set autochdir                 " 常にカレントバッファをルートに
 set shellslash                " pathのbackslash対応(Dos用)
 set shortmess+=I              " ウガンダ非表示
 set display=lastline          " 長い行もちゃんと表示
@@ -130,8 +129,7 @@ let g:deoplete#enable_at_startup = 1
 "---Color Syntax---
 syntax on
 set background=dark
-colorscheme japanesque
-colorscheme novum
+colorscheme anderson
 set termguicolors
 
 
@@ -179,9 +177,9 @@ set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボ�
 " Python
 "----------------------------------------
 " 実行ファイルのフォルダにpython3を作りその中に関連ファイルを入れる設定
-set runtimepath+=$VIM
+" set runtimepath+=$VIM
 " set pythonthreedll=$VIM/python3/python35.dll
-let g:python3_host_prog = 'c:\bin\Python\Python38\python'
+let g:python3_host_prog = 'c:\bin\Python\Python37\python'
 let g:python_host_prog = 'c:\bin\Python\Python27\python'
 
 "----------------------------------------
@@ -236,38 +234,41 @@ function! s:unite_my_settings()
 endfunction
 
 "-- Denite Setting --
-let g:denite_enable_start_insert = 1
+" let g:denite_enable_start_insert = 1
 " use floating
-let s:denite_win_width_percent = 0.80
-let s:denite_win_height_percent = 0.5
-let s:denite_default_options = {
-    \ 'split': 'floating',
-    \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
-    \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
-    \ 'winheight': float2nr(&lines * s:denite_win_height_percent),
-    \ 'winrow': float2nr((&lines - (&lines * s:denite_win_height_percent)) / 2),
-    \ 'highlight_filter_background': 'DeniteFilter',
-    \ 'prompt': '$ ',
-    \ 'start_filter': v:true,
-    \ }
+" let s:denite_win_width_percent = 0.80
+" let s:denite_win_height_percent = 0.5
+" let s:denite_default_options = {
+"    \ 'split': 'floating',
+"    \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
+"    \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
+"    \ 'winheight': float2nr(&lines * s:denite_win_height_percent),
+"    \ 'winrow': float2nr((&lines - (&lines * s:denite_win_height_percent)) / 2),
+"    \ 'highlight_filter_background': 'DeniteFilter',
+"    \ 'prompt': '$ ',
+"    \ 'start_filter': v:true,
+"    \ }
 
 "-- KeyMapping --
-nnoremap <silent> <leader>h :<C-u>Unite file_mru<CR>
-nnoremap <silent> <leader>b :<C-u>Unite buffer<CR>
+nnoremap <silent> <leader>h :<C-u>Denite file_mru<CR>
+nnoremap <silent> <f2> :<C-u>Unite file_mru<CR>
+nnoremap <silent> <leader>b :<C-u>Denite buffer<CR>
 nnoremap <silent> <leader>y :<C-u>Unite history/yank<CR>
 nnoremap <silent> <leader>Y :<C-u>Unite yankround<CR>
 nnoremap <silent> <leader>o :<C-u>Unite -vertical -winwidth=30 outline<CR>
 nnoremap <silent> <leader>O :<C-u>Unite -vertical -winwidth=30 -no-quit outline<CR>
 nnoremap <silent> <leader>w :<C-u>Unite window<CR>
 nnoremap <silent> <leader>t :<C-u>Unite tab<CR>
-nnoremap <silent> <leader>m :<C-u>Unite mark<CR>
+nnoremap <silent> <leader>m :<C-u>Denite mark<CR>
 nnoremap <silent> <leader>M :<C-u>Unite mapping<CR>
 nnoremap <silent> <leader>s :<C-u>Unite session<CR>
 nnoremap <silent> <leader>r :<C-u>Unite -buffer-name=register register<CR>
 nnoremap <silent> <leader>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
 nnoremap <silent> <leader>a :<C-u>Unit BookmarkAdd<CR>
 nnoremap <silent> <leader>c :<C-u>Unit bookmark<CR>
-nnoremap <F2> :VimFiler<CR>
+" nnoremap <silent> <leader>l :<C-u>Denite --auto-highlight line<CR>
+nnoremap <silent> <leader>l :<C-u>Denite line<CR>
+" nnoremap <F2> :VimFiler<CR>
 "inoremap <silent> <C-s> <Esc>:Unite history/yank<CR>
 
 "--------------------------------------------------
@@ -377,8 +378,8 @@ function! s:CheckScratchWritten()
 endfunction
 
 augroup CmdexScratch
-autocmd!
-autocmd BufWritePost * call <SID>CheckScratchWritten()
+  autocmd!
+  autocmd BufWritePost * call <SID>CheckScratchWritten()
 augroup END
 
 "-- <Leader>J にmap --
@@ -427,7 +428,7 @@ let g:highlightedyank_highlight_duration = 500
 " let QFixHowm_Wiki = 1               "オートリンクでファイルを開く
 
 "------------------------------------------------------------
-" 検索関連
+" 検索関連                                                                                                                               
 "------------------------------------------------------------
 set nohlsearch " 最初はハイライトOFF(毎回ON-OFFする)
 " set incsearch  " インクリメンタルサーチ
@@ -484,32 +485,41 @@ imap <C-S-CR> <Up><End><CR>
 " バッファ, Window, Tab操作
 "------------------------------------------------------------
 "-- Window移動 -- wのトルグ
-call submode#enter_with('win-mode', 'n', '', '<C-w>', '<Nop>')
 call submode#enter_with('win-mode', 'n', '', '<Leader>s', '<Nop>')
-call submode#leave_with('win-mode', 'n', '', '<Space>')
-call submode#map('win-mode', 'n', '', 's', '<C-w>w')
-call submode#map('win-mode', 'n', '', 'S', '<C-w>W')
-call submode#map('win-mode', 'n', '', 'h', '<C-w>h')
-call submode#map('win-mode', 'n', '', 'k', '<C-w>k')
-call submode#map('win-mode', 'n', '', 'j', '<C-w>j')
-call submode#map('win-mode', 'n', '', 'l', '<C-w>l')
-call submode#map('win-mode', 'n', '', 'H', '<C-w>H')
-call submode#map('win-mode', 'n', '', 'K', '<C-w>K')
-call submode#map('win-mode', 'n', '', 'J', '<C-w>J')
-call submode#map('win-mode', 'n', '', 'L', '<C-w>L')
-call submode#map('win-mode', 'n', '', '>', '<C-w>>')
-call submode#map('win-mode', 'n', '', '<', '<C-w><')
-call submode#map('win-mode', 'n', '', '.', '<C-w>+')
-call submode#map('win-mode', 'n', '', ',', '<C-w>-')
-call submode#map('win-mode', 'n', '', '+', '<C-w>+')
-call submode#map('win-mode', 'n', '', '-', '<C-w>-')
-call submode#map('win-mode', 'n', '', 'r', '<C-w>r')
-call submode#map('win-mode', 'n', '', '=', '<C-w>=')
-call submode#map('win-mode', 'n', '', '0', '<C-w>=')
-call submode#map('win-mode', 'n', 'rs', 'w', '<CR>:Unite window')
+call submode#leave_with('win-mode', 'n', '', '<Space>')  " win-modeの終了
+call submode#map('win-mode', 'n', '', 's', '<C-w>w')     " 次のウィンドウへ移動
+call submode#map('win-mode', 'n', '', 'S', '<C-w>W')     " 前のウィンドウへ移動
+call submode#map('win-mode', 'n', '', 'h', '<C-w>h')     " 左のウィンドウへ移動
+call submode#map('win-mode', 'n', '', 'k', '<C-w>k')     " 上のウィンドウへ移動
+call submode#map('win-mode', 'n', '', 'j', '<C-w>j')     " 下のウィンドウへ移動
+call submode#map('win-mode', 'n', '', 'l', '<C-w>l')     " 右のウィンドウへ移動
+call submode#map('win-mode', 'n', '', 'H', '<C-w>H')     " カレントウィンドウを左に移動
+call submode#map('win-mode', 'n', '', 'K', '<C-w>K')     " カレントウィンドウを上に移動
+call submode#map('win-mode', 'n', '', 'J', '<C-w>J')     " カレントウィンドウを下に移動
+call submode#map('win-mode', 'n', '', 'L', '<C-w>L')     " カレントウィンドウを右に移動
+call submode#map('win-mode', 'n', '', '>', '<C-w>>')     " カレントウィンドウ幅を拡大
+call submode#map('win-mode', 'n', '', '<', '<C-w><')     " カレントウィンドウ幅を縮小
+call submode#map('win-mode', 'n', '', '+', '<C-w>+')     " カレントウィンドウ高さを拡大
+call submode#map('win-mode', 'n', '', '.', '<C-w>+')     " カレントウィンドウ高さを拡大(alias)
+call submode#map('win-mode', 'n', '', '-', '<C-w>-')     " カレントウィンドウ高さを縮小
+call submode#map('win-mode', 'n', '', '.', '<C-w>-')     " カレントウィンドウ高さを縮小(alias)
+call submode#map('win-mode', 'n', '', 'c', '<C-w>c')     " カレントウィンドウを閉じる
+call submode#map('win-mode', 'n', '', 'q', '<C-w>q')     " カレントウィンドウを終了
+call submode#map('win-mode', 'n', '', 'Q', ':quit!<CR>') " カレントウィンドウを強制終了
+call submode#map('win-mode', 'n', '', 'p', '<C-w>p')     " 前にアクセスしたウィンドウに移動
+call submode#map('win-mode', 'n', '', 'P', '<C-w>P')     " プレビューウィンドウに移動
+call submode#map('win-mode', 'n', '', 'o', '<C-w>o')     " カレントウィンド以外をすべて閉じる
+call submode#map('win-mode', 'n', '', 'r', '<C-w>r')     " ウィンドウ配置を下向きに回転
+call submode#map('win-mode', 'n', '', 'R', '<C-w>R')     " ウィンドウ配置を上向きに回転
+call submode#map('win-mode', 'n', '', '=', '<C-w>=')     " すべてのウィンドウの高さをそろえる
+call submode#map('win-mode', 'n', '', '0', '<C-w>=')     " すべてのウィンドウの高さをそろえる(alias)
+call submode#map('win-mode', 'n', '', 't', 'gt')         " 次のタブに移動
+call submode#map('win-mode', 'n', '', 'T', '<C-w>T')     " カレントウィンドウを新しいタブに移す
+
 "-- Window分割
 nnoremap <LocalLeader>s :<C-u>sp<CR>
 nnoremap <LocalLeader>v :<C-u>vs<CR>
+nnoremap <LocalLeader>V :<C-u>Vinarise<CR>
 
 "-- バッファ切り替え --
 call submode#enter_with('buf-change', 'n', '', '<LocalLeader>b', ':<C-u>bn<CR>')
@@ -596,6 +606,7 @@ nnoremap <S-Up>    v<Up>
 nnoremap <S-Down>  v<Down>
 nnoremap <S-Left>  v<Left>
 nnoremap <S-Right> v<Right>
+nnoremap <S-Right> v<Right>
 
 vnoremap <S-Up>    <Up>
 vnoremap <S-Down>  <Down>
@@ -644,10 +655,10 @@ let g:expand_region_text_objects = {
 "----------------------------------------
 " mark設定
 "----------------------------------------
-"* markで使うのはキーボード上段のq-uのみ使う
-"* mmで自動的にasd...lに割振り
-"* mo, miでマーク履歴(トルグにする)
-"* 先にmのキーバインド外しているので使う分はすべてmap
+" * markで使うのはキーボード上段のq-uのみ使う
+" * mmで自動的にasd...lに割振り
+" * mo, miでマーク履歴(トルグにする)
+" * 先にmのキーバインド外しているので使う分はすべてmap
 
 "-- key --
 nnoremap <silent> mm :<C-u>call <SID>AutoMarkrement()<CR>
@@ -691,7 +702,7 @@ endfunction
 "----------------------------------------
 " Quick Run
 "----------------------------------------
-noremap <silent>mn :w<CR>:QuickRun<CR>
+noremap <silent>mn :QuickRun<CR>
 noremap <silent><F8> :w<CR>:QuickRun<CR>
 "-- key ---
 
@@ -707,9 +718,6 @@ let g:quickrun_config = {
           \},
 \}
 
-if !exists('g:quickrun_config')
-    let g:quickrun_config = {}
-endif
 
 let g:quickrun_config['nim'] = {
       \ 'command': 'nim',
@@ -857,8 +865,8 @@ nnoremap  <LocalLeader>m :set modifiable!<CR>
 "help :!start
 "win専用 <CR>は2個入れないと上手くいかない
 function! s:ExplorerCurrentDir()
-    " execute '!start %:h'
-    execute '!explorer %:h'
+  " execute '!start %:h'
+  execute '!explorer %:h'
 endfunction
 noremap <leader>e :<C-u>call <SID>ExplorerCurrentDir()<CR><CR>
 
@@ -897,3 +905,57 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 let g:indentLine_enable = 1
 
+
+
+"----------------------------------------
+" denite settin
+"----------------------------------------
+" set termguicolors    " ターミナルでも True Color を使えるようにする。
+" set pumblend=20      " 0 〜 100 が指定できます。ドキュメントによると 5 〜 30 くらいが適当だそうです。
+
+" 以下はおまけ。ここでは Denite の設定を載せていますが、
+" 同様の仕組みで任意のウィンドウを半透明化できるでしょう。
+" augroup transparent-windows
+"   autocmd!
+"   autocmd FileType denite set winblend=20  " こちらも 5 〜 30 で試してみてください。
+"   autocmd FileType denite-filter set winblend=20
+" augroup END
+
+augroup denite_filter
+  autocmd FileType denite call s:denite_my_settings()
+  function! s:denite_my_settings() abort
+    nnoremap <silent><buffer><expr> <CR>
+    \ denite#do_map('do_action')
+    nnoremap <silent><buffer><expr> d
+    \ denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> s
+    \ denite#do_map('do_action', 'split')
+    nnoremap <silent><buffer><expr> t
+    \ denite#do_map('do_action', 'tabopen')
+    nnoremap <silent><buffer><expr> v
+    \ denite#do_map('do_action', 'vsplit')
+    nnoremap <silent><buffer><expr> p
+    \ denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> q
+    \ denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i
+    \ denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> m 
+    \ denite#do_map('toggle_select').'j'
+  endfunction
+augroup END
+
+" call denite#custom#map('insert', "jj", <denite:enter_mode:normal>)
+
+
+ " コマンド．file_rec で使うコマンド
+" call denite#custom#var('file_rec', 'command',
+    "\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+" Endif
+" let s:denite_default_options = {
+" "    \ 'split': 'floating',
+" "    \ 'highlight_filter_background': 'DeniteFilter',
+"   \ 'prompt': '>',
+"   \ }
+" "
+" call denite#custom#option('default', s:denite_default_options)
