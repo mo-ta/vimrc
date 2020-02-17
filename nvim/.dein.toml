@@ -17,7 +17,7 @@ repo = 'Shougo/unite-session'
 # repo = 'osyo-manga/vim-vigemo'
 
 # [[plugins]]
-# reco = 'haya14busa/vim-migemo'
+# repo = 'haya14busa/vim-migemo'
 [[plugins]]
 repo = 'haya14busa/incsearch.vim'
 [[plugins]]
@@ -41,8 +41,6 @@ repo = 'dylnmc/novum.vim'
 [[plugins]]
 # repo = 'mo-ta/vim-colors-mota'
 repo = 'aereal/vim-colors-japanesque'
-
-
 
 # [[plugins]]
 # repo = 'fuenor/qfixhowm'

@@ -1,98 +1,90 @@
 " ＃todo
 " - migemo 導入-完了
+" - win-modeの調整 完了
+" - vimrcのフォルダ管理 - 完了
+" - python_host_prog を端末が変わっても自動で見る 完了
+" - denite 導入 - 動くとこまでは完了
+"    - autochdir 有効にするとdeniteが動かないので無効にした
+"    - インサートモードでスタートしてjjで抜けたい
+"    - フローティングはBGの色と位置がちゃんと指定できないのでそれまでは下側にする
+"    - menu使って簡単なトルグとかを切り替えたい(文字コードとか)
+" - 高速検索エンジン導入
+" - gitとの連携導入
+" - QuickRun
+"   - 強制終了の方法
+"   - rubyの切り替え, yamyの実行とか
+"   - 入力待ちで止めてるプログラムを実行する方法
+" - mark場所の表示
+" - yankaroundの挙動がおかしいのを直す
+"
 "
 "----------------------------------------
 " initial settings
+"----------------------------------------
 set nocompatible   " vi 互換じゃない
-"----------------------------------------
-" dein settings 
-"----------------------------------------
-"-- 初期設定 --
-let s:cache_home = empty($XDG_CACHE_HOME) ? expand('/cache') : $XDG_CACHE_HOME
-let s:dein_dir = s:cache_home .  '/dein'
-let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
-
-"-- 自動インストール --
-if !isdirectory(s:dein_repo_dir)
-  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dein_repo_dir))
-endif
-let &runtimepath = s:dein_repo_dir .",". &runtimepath
-"-- プラグイン読み込み＆キャッシュ作成 --
-let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
-if dein#load_state(s:dein_dir)
-    call dein#begin(s:dein_dir, [$MYVIMRC, s:toml_file])
-    call dein#load_toml(s:toml_file)
-    call dein#end()
-    call dein#save_state()
-endif
-
-"-- 不足プラグインの自動インストール --
-let g:vimproc#download_windows_dll = 1  "コンパイル済みdllの自動ダウンロード
-if has('vim_starting') && dein#check_install()
-    call dein#install()
-endif
 
 "----------------------------------------
 " ディレクトリ設定＆自動作成
 "----------------------------------------
 "-- ディレクトリ指定
-let  s:tmp_dir         = s:cache_home . '/tmp'
-let  s:local_dir       = s:cache_home . '/local'
-let  s:swap_dir        = s:tmp_dir    . '/swap'
-let  s:backup_dir      = s:tmp_dir    . '/backup'
-let  s:undo_dir        = s:tmp_dir    . '/undo'
-let  s:bookmark_dir    = s:local_dir  . '/bookmark'
-let  s:junkfile_dir    = s:local_dir  . '/junkfile'
-let  s:howm_dir        = s:local_dir  . '/howm'
+let s:dirs = {}
+let s:dirs["cache"] = $XDG_CACHE_HOME
+  let s:dirs["dein"] = s:dirs["cache"] . '/dein'
+    let s:dirs["repo"] = s:dirs["dein"] . '/repos/github.com/Shougo/dein.vim'
 
-let s:dirs = { 
-      \ "tmp"    :  s:cache_home . '/tmp',
-      \ "local"  :  s:cache_home . '/local'
-      \}
+  let s:dirs["tmp"] = $HOME . '/vim/tmp'
+    " let s:dirs["swap"]    = s:dirs["tmp"] . '/swap'
+    let s:dirs["backup"]  = s:dirs["tmp"] . '/backup'
+    let s:dirs["undo"]    = s:dirs["tmp"] . '/undo'
 
-echo s:dirs
+  let s:dirs["local"] = $HOME . '/vim/local'
+    let s:dirs["howm"]     =  s:dirs["local"] . '/howm'
+    let s:dirs["junk"]     =  s:dirs["local"] . '/junk'
+    " let s:dirs["bookmark"] =  s:dirs["local"] . '/bookmark'
+
 "-- ディレクトリ確認と自動生成 --
-if !isdirectory(s:tmp_dir)
-    call mkdir(iconv(s:tmp_dir, &encoding, &termencoding), 'p')
+for key in keys(s:dirs)
+  if key != "repo" && !isdirectory(s:dirs[key])
+    call mkdir(iconv(s:dirs[key], &encoding, &termencoding), 'p')
+  endif
+endfor
+
+"----------------------------------------
+" dein settings
+"----------------------------------------
+"-- 自動インストール --
+if !isdirectory(s:dirs["repo"])
+  call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(s:dirs["repo"]))
 endif
 
-if !isdirectory(s:local_dir)
-    call mkdir(iconv(s:local_dir, &encoding, &termencoding), 'p')
+let &runtimepath = s:dirs["repo"] .",". &runtimepath
+"-- プラグイン読み込み＆キャッシュ作成 --
+let s:toml_file = fnamemodify(expand('<sfile>'), ':h').'/.dein.toml'
+if dein#load_state(s:dirs["dein"])
+  call dein#begin(s:dirs["dein"], [$MYVIMRC, s:toml_file])
+  call dein#load_toml(s:toml_file)
+  call dein#end()
+  call dein#save_state()
 endif
 
-if !isdirectory(s:swap_dir)
-    call mkdir(iconv(s:swap_dir, &encoding, &termencoding), 'p')
-endif
-if !isdirectory(s:backup_dir)
-    call mkdir(iconv(s:backup_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:undo_dir)
-    call mkdir(iconv(s:undo_dir, &encoding, &termencoding), 'p')
+"-- 不足プラグインの自動インストール --
+let g:vimproc#download_windows_dll = 1  "コンパイル済みdllの自動ダウンロード
+if has('vim_starting') && dein#check_install()
+  call dein#install()
 endif
 
-if !isdirectory(s:junkfile_dir)
-    call mkdir(iconv(s:junkfile_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:bookmark_dir)
-    call mkdir(iconv(s:bookmark_dir, &encoding, &termencoding), 'p')
-endif
-
-if !isdirectory(s:howm_dir)
-    call mkdir(iconv(s:howm_dir, &encoding, &termencoding), 'p')
-endif
-
-"-- ディレクトリの指定
+"-- ディレクトリの指定 --
 set noswapfile
-let &directory = s:swap_dir
+" let &directory = s:dirs["swap"]
 
 set backup
-let &backupdir = s:backup_dir
+let &backupdir = s:dirs["backup"]
 
 if has('persistent_undo')
-    let &undodir = s:undo_dir
+    let &undodir = s:dirs["undo"]
     set undofile
+else
+  echo "can not set undofile."
 endif
 
 "----------------------------------------
@@ -117,7 +109,7 @@ set expandtab                 " タブ入力でSpaceに置き換わる
 set shiftwidth=2              " 自動シフトでのシフト量
 set tabstop=2                 " タブのシフト量
 set autoindent
-filetype plugin indent on     
+filetype plugin indent on
 set wildmenu wildmode=list:longest,full "ワイルドメニュー設定
 set helplang=ja,en            " helpは日本語優先
 set pumheight=10
@@ -149,14 +141,13 @@ set laststatus=2
 let g:airline_theme = 'molokai'
 "----対応する括弧をハイライト
 set showmatch
-" highlight MatchParen ctermfg=Red
 set matchtime=1 "マッチする括弧の表示時間 *0.1sec
 "-- viminfo --
 "[']: markのファイル履歴
 "["]: レジスタ行数
 "[:]: コマンド履歴
 "[n]: 保存ファイルの指定
-set viminfo='50,\"1000,:0,n/viminfo
+set viminfo='50,\"1000,:0,n~/vim/viminfo
 
 "----------------------------------------
 " フォント設定
@@ -174,13 +165,56 @@ set nomousehide   " 入力時にマウスポインタを隠さない
 set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボードへ (:help guioptions_a)
 
 "----------------------------------------
-" Python
+" python, ruby ,node
 "----------------------------------------
-" 実行ファイルのフォルダにpython3を作りその中に関連ファイルを入れる設定
-" set runtimepath+=$VIM
-" set pythonthreedll=$VIM/python3/python35.dll
-let g:python3_host_prog = 'c:\bin\Python\Python37\python'
-let g:python_host_prog = 'c:\bin\Python\Python27\python'
+" ちゃんと端末差を見ようとすると大変なのでとりあえず
+set runtimepath+=$VIM
+let g:python3_host_prog = substitute(system('where python'), '\n.*', '', '')
+
+" ちゃんとバージョンみたのは遅いのでコメントアウト
+" function! s:ProgPath(prog_name)
+"   let ver = system(a:prog_name . ' --version')
+"   if ver =~ '[ v]\(\d\{1,2\}\)\.\d\{1,2\}'
+"     return {
+"     \ 'main' : substitute(ver, '.*[ v]\(\d\{1,2\}\)\.\(\d\{1,2\}\).*', '\1', ''),
+"     \ 'sub'  : substitute(ver, '.*[ v]\(\d\{1,2\}\)\.\(\d\{1,2\}\).*', '\2', ''),
+"     \ 'path' : substitute(system('where ' . a:prog_name), '\n.*', '', ''),
+"   \}
+"   else
+"     return {}
+"   endif
+" endfunction
+"
+" let tmp = s:ProgPath("python")
+" if tmp != {}
+"   if tmp['main'] == 3
+"     let g:python3_host_prog = tmp['path']
+"     let g:loaded_python_provider = 0
+"   elseif s:python_path['main'] == 2
+"     let g:python_host_prog = tmp['path']
+"     let g:loaded_python3_provider = 0
+"   else
+"     let g:loaded_python3_provider = 0
+"     let g:loaded_python_provider = 0
+"   endif
+" else
+"   let g:loaded_python3_provider = 0
+"   let g:loaded_python_provider = 0
+" endif
+"
+" let tmp = s:ProgPath("ruby")
+" if tmp != {}
+"   let g:ruby_host_prog = tmp['path']
+" else
+"   let g:loaded_ruby_provider = 0
+" endif
+"
+" let tmp = s:ProgPath("node")
+" if tmp != {}
+"   let g:node_host_prog = tmp['path']
+" else
+"   let g:loaded_node_provider = 0
+" endif
 
 "----------------------------------------
 " Mapping無効化 Leader割当
@@ -212,7 +246,7 @@ let g:unite_source_history_yank_enable = 1
 let g:unite_source_file_mru_limit = 200
 let g:unite_source_file_mru_filename_format = ':~:.' "最近開いたファイル 
 let g:unite_source_session_enable_auto_save = 1
-let g:unite_source_bookmark_directory = s:bookmark_dir
+" let g:unite_source_bookmark_directory = s:dirs["bookmark"]
 
 "-- Mapping In Unite --
 augroup UniteKeyMap
@@ -233,42 +267,20 @@ function! s:unite_my_settings()
     inoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
 endfunction
 
-"-- Denite Setting --
-" let g:denite_enable_start_insert = 1
-" use floating
-" let s:denite_win_width_percent = 0.80
-" let s:denite_win_height_percent = 0.5
-" let s:denite_default_options = {
-"    \ 'split': 'floating',
-"    \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
-"    \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
-"    \ 'winheight': float2nr(&lines * s:denite_win_height_percent),
-"    \ 'winrow': float2nr((&lines - (&lines * s:denite_win_height_percent)) / 2),
-"    \ 'highlight_filter_background': 'DeniteFilter',
-"    \ 'prompt': '$ ',
-"    \ 'start_filter': v:true,
-"    \ }
 
 "-- KeyMapping --
 nnoremap <silent> <leader>h :<C-u>Denite file_mru<CR>
-nnoremap <silent> <f2> :<C-u>Unite file_mru<CR>
 nnoremap <silent> <leader>b :<C-u>Denite buffer<CR>
-nnoremap <silent> <leader>y :<C-u>Unite history/yank<CR>
-nnoremap <silent> <leader>Y :<C-u>Unite yankround<CR>
+nnoremap <silent> <leader>y :<C-u>Denite neoyank<CR>
 nnoremap <silent> <leader>o :<C-u>Unite -vertical -winwidth=30 outline<CR>
 nnoremap <silent> <leader>O :<C-u>Unite -vertical -winwidth=30 -no-quit outline<CR>
-nnoremap <silent> <leader>w :<C-u>Unite window<CR>
-nnoremap <silent> <leader>t :<C-u>Unite tab<CR>
 nnoremap <silent> <leader>m :<C-u>Denite mark<CR>
 nnoremap <silent> <leader>M :<C-u>Unite mapping<CR>
 nnoremap <silent> <leader>s :<C-u>Unite session<CR>
-nnoremap <silent> <leader>r :<C-u>Unite -buffer-name=register register<CR>
+nnoremap <silent> <leader>r :<C-u>Denite register<CR>
 nnoremap <silent> <leader>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
-nnoremap <silent> <leader>a :<C-u>Unit BookmarkAdd<CR>
-nnoremap <silent> <leader>c :<C-u>Unit bookmark<CR>
-" nnoremap <silent> <leader>l :<C-u>Denite --auto-highlight line<CR>
+nnoremap <silent> <leader>c :<C-u>Denite command_history<CR>
 nnoremap <silent> <leader>l :<C-u>Denite line<CR>
-" nnoremap <F2> :VimFiler<CR>
 "inoremap <silent> <C-s> <Esc>:Unite history/yank<CR>
 
 "--------------------------------------------------
@@ -349,7 +361,7 @@ nnoremap <silent> mp :PrevimOpen<CR>
 "----------------------------------------
 command! -nargs=0 JunkFile call s:open_junk_file()
 function! s:open_junk_file()
-    let l:junk_dir = s:junkfile_dir . strftime('/%Y/%m')
+    let l:junk_dir = s:dirs["junk"] . strftime('/%Y/%m')
     if !isdirectory(l:junk_dir)
         call mkdir(l:junk_dir, 'p')
     endif
@@ -413,7 +425,7 @@ let g:highlightedyank_highlight_duration = 500
 " let QFixHowm_Key  = ','
 " let QFixHowm_KeyB = ''
 "
-" let howm_dir            = s:howm_dir
+" let howm_dir            = s:dirs["howm"]
 " let howm_filename       = '%Y/%m/%Y-%m-%d-%H%M%S.md'
 " let howm_fileencoding   = 'cp932'
 " let howm_fileformat     = 'dos'
@@ -542,7 +554,6 @@ nnoremap <LocalLeader>T :<C-u>tabnew<CR>
 "------------------------------------------------------------
 " Undo 設定
 "------------------------------------------------------------
-set undofile "Undo情報をファイルに記録
 let g:undotree_SetFocusWhenToggle =  1
 nnoremap <silent> <leader>u :<C-u>UndotreeToggle<CR>
 
@@ -606,7 +617,6 @@ nnoremap <S-Up>    v<Up>
 nnoremap <S-Down>  v<Down>
 nnoremap <S-Left>  v<Left>
 nnoremap <S-Right> v<Right>
-nnoremap <S-Right> v<Right>
 
 vnoremap <S-Up>    <Up>
 vnoremap <S-Down>  <Down>
@@ -668,7 +678,7 @@ call submode#enter_with('jump-markpos', 'n', '', 'mo', ']`')
 call submode#enter_with('jump-markpos', 'n', '', 'mi', '[`')
 call submode#map('jump-markpos', 'n', 'r', 'o', ']`')
 call submode#map('jump-markpos', 'n', 'r', 'i', '[`')
-call submode#map('jump-markpos', 'n', 'rs', 'm', '<CR>:Unite mark<CR>')
+call submode#map('jump-markpos', 'n', 'rs', 'm', '<CR>:Denite mark<CR>')
 "-- 手動で使う分をmap --
 "
 nnoremap mq mq:echo 'marked q'<CR>
@@ -703,7 +713,6 @@ endfunction
 " Quick Run
 "----------------------------------------
 noremap <silent>mn :QuickRun<CR>
-noremap <silent><F8> :w<CR>:QuickRun<CR>
 "-- key ---
 
 "-- config --
@@ -818,12 +827,12 @@ set foldmethod=marker " 折り畳みの基準
 " https://www.soum.co.jp/misc/vim-no-susume/1/
 " http://secret-garden.hatenablog.com/entry/2015/04/16/000000
 
+
 noremap gk k
 noremap gj j
-
 "-- accelerated_jkで加速, l,h にも拡張
 " let g:accelerated_jk_acceleration_table = [7,12,17,21,24,26,28,30]
-let g:accelerated_jk_acceleration_table = [7,12,17,21,24,28,31,40]
+let g:accelerated_jk_acceleration_table = [7, 12, 17, 21, 24, 28, 31, 40]
 
 nmap k <Plug>(accelerated_gk)
 nmap j <Plug>(accelerated_gj)
@@ -871,6 +880,22 @@ endfunction
 noremap <leader>e :<C-u>call <SID>ExplorerCurrentDir()<CR><CR>
 
 
+
+
+" Examples:
+" after:    \v     \m       \M       \V       matches ~
+"               'magic' 'nomagic'
+"           $      $        $        \$       matches end-of-line
+"           .      .        \.       \.       matches any character
+"           *      *        \*       \*       any number of the previous atom
+"           ()     \(\)     \(\)     \(\)     grouping into an atom
+"           |      \|       \|       \|       separating alternatives
+"          \a     \a       \a       \a       alphabetic character
+"          \\     \\       \\       \\       literal backslash
+"          \.     \.       .        .        literal dot
+"          \{     {        {        {        literal '{'
+"           a      a        a        a        literal 'a'
+"
 "----------------------------------------
 " git
 "----------------------------------------
@@ -952,10 +977,26 @@ augroup END
 " call denite#custom#var('file_rec', 'command',
     "\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 " Endif
-" let s:denite_default_options = {
-" "    \ 'split': 'floating',
+let s:denite_default_options = {
+\ 'split': 'floating',
 " "    \ 'highlight_filter_background': 'DeniteFilter',
 "   \ 'prompt': '>',
-"   \ }
-" "
+\ }
+
 " call denite#custom#option('default', s:denite_default_options)
+
+"-- Denite Setting --
+" let g:denite_enable_start_insert = 1
+" use floating
+" let s:denite_win_width_percent = 0.80
+" let s:denite_win_height_percent = 0.5
+" let s:denite_default_options = {
+"    \ 'split': 'floating',
+"    \ 'winwidth': float2nr(&columns * s:denite_win_width_percent),
+"    \ 'wincol': float2nr((&columns - (&columns * s:denite_win_width_percent)) / 2),
+"    \ 'winheight': float2nr(&lines * s:denite_win_height_percent),
+"    \ 'winrow': float2nr((&lines - (&lines * s:denite_win_height_percent)) / 2),
+"    \ 'highlight_filter_background': 'DeniteFilter',
+"    \ 'prompt': '$ ',
+"    \ 'start_filter': v:true,
+"    \ }
