@@ -3,13 +3,15 @@
 " - win-modeの調整 完了
 " - vimrcのフォルダ管理 - 完了
 " - python_host_prog を端末が変わっても自動で見る 完了
+" - gitとの連携導入 完了
+"    - gitguitterはアンインストール
+"    - bitbuketでのGbrauseに対応したい
 " - denite 導入 - 動くとこまでは完了
 "    - autochdir 有効にするとdeniteが動かないので無効にした
 "    - インサートモードでスタートしてjjで抜けたい
 "    - フローティングはBGの色と位置がちゃんと指定できないのでそれまでは下側にする
 "    - menu使って簡単なトルグとかを切り替えたい(文字コードとか)
 " - 高速検索エンジン導入
-" - gitとの連携導入
 " - QuickRun
 "   - 強制終了の方法
 "   - rubyの切り替え, yamyの実行とか
@@ -17,7 +19,20 @@
 " - mark場所の表示
 " - yankaroundの挙動がおかしいのを直す
 "
+" let g:debug_init = 1
 "
+" function! s:debug_measure_time()
+"   if g:debug_init
+"     if !exists('g:debug_time')
+"       let g:debug_time = {}
+"       let g:debug_count = 0
+"     endif
+"     let g:debug_count += 1
+"     let g:debug_time[g:debug_count] = strftime("%S%3N")
+"   endif
+" endfunction
+"
+" call s:debug_measure_time()
 "----------------------------------------
 " initial settings
 "----------------------------------------
@@ -28,6 +43,7 @@ set nocompatible   " vi 互換じゃない
 "----------------------------------------
 "-- ディレクトリ指定
 let s:dirs = {}
+let s:dirs["init"] =  'c:/bin/nvim'
 let s:dirs["cache"] = $XDG_CACHE_HOME
   let s:dirs["dein"] = s:dirs["cache"] . '/dein'
     let s:dirs["repo"] = s:dirs["dein"] . '/repos/github.com/Shougo/dein.vim'
@@ -48,7 +64,7 @@ for key in keys(s:dirs)
     call mkdir(iconv(s:dirs[key], &encoding, &termencoding), 'p')
   endif
 endfor
-
+" call s:debug_measure_time()
 "----------------------------------------
 " dein settings
 "----------------------------------------
@@ -67,12 +83,14 @@ if dein#load_state(s:dirs["dein"])
   call dein#save_state()
 endif
 
+" call s:debug_measure_time()
+
 "-- 不足プラグインの自動インストール --
 let g:vimproc#download_windows_dll = 1  "コンパイル済みdllの自動ダウンロード
 if has('vim_starting') && dein#check_install()
   call dein#install()
 endif
-
+" call s:debug_measure_time()
 "-- ディレクトリの指定 --
 set noswapfile
 " let &directory = s:dirs["swap"]
@@ -95,6 +113,7 @@ set number                    " 行番号表示
 set hidden                    " 編集中でもバッファを開く
 set columns=999               " ウインドウの幅さ
 set lines=999                 " ウインドウ高さ
+set history=1000
 set scrolloff=2               " 上下のスクロールしない高さ
 " set autochdir                 " 常にカレントバッファをルートに
 set shellslash                " pathのbackslash対応(Dos用)
@@ -121,7 +140,7 @@ let g:deoplete#enable_at_startup = 1
 "---Color Syntax---
 syntax on
 set background=dark
-colorscheme anderson
+colorscheme onedark
 set termguicolors
 
 
@@ -138,7 +157,7 @@ set imsearch=-1
 "
 "----AirLine------------
 set laststatus=2
-let g:airline_theme = 'molokai'
+let g:airline_theme = 'onedark'
 "----対応する括弧をハイライト
 set showmatch
 set matchtime=1 "マッチする括弧の表示時間 *0.1sec
@@ -147,7 +166,7 @@ set matchtime=1 "マッチする括弧の表示時間 *0.1sec
 "["]: レジスタ行数
 "[:]: コマンド履歴
 "[n]: 保存ファイルの指定
-set viminfo='50,\"1000,:0,n~/vim/viminfo
+set viminfo='50,\"1000,:1000,n~/vim/viminfo
 
 "----------------------------------------
 " フォント設定
@@ -167,7 +186,6 @@ set guioptions+=a " ビジュアル選択(D&D他)を自動的にクリップボ�
 "----------------------------------------
 " python, ruby ,node
 "----------------------------------------
-" ちゃんと端末差を見ようとすると大変なのでとりあえず
 set runtimepath+=$VIM
 let g:python3_host_prog = substitute(system('where python'), '\n.*', '', '')
 
@@ -185,37 +203,39 @@ let g:python3_host_prog = substitute(system('where python'), '\n.*', '', '')
 "   endif
 " endfunction
 "
-" let tmp = s:ProgPath("python")
-" if tmp != {}
-"   if tmp['main'] == 3
-"     let g:python3_host_prog = tmp['path']
-"     let g:loaded_python_provider = 0
-"   elseif s:python_path['main'] == 2
-"     let g:python_host_prog = tmp['path']
-"     let g:loaded_python3_provider = 0
+" if 1
+"   let tmp = s:ProgPath("python")
+"   if tmp != {}
+"     if tmp['main'] == 3
+"       let g:python3_host_prog = tmp['path']
+"       let g:loaded_python_provider = 0
+"     elseif s:python_path['main'] == 2
+"       let g:python_host_prog = tmp['path']
+"       let g:loaded_python3_provider = 0
+"     else
+"       let g:loaded_python3_provider = 0
+"       let g:loaded_python_provider = 0
+"     endif
 "   else
 "     let g:loaded_python3_provider = 0
 "     let g:loaded_python_provider = 0
 "   endif
-" else
-"   let g:loaded_python3_provider = 0
-"   let g:loaded_python_provider = 0
+"
+"   let tmp = s:ProgPath("ruby")
+"   if tmp != {}
+"     let g:ruby_host_prog = tmp['path']
+"   else
+"     let g:loaded_ruby_provider = 0
+"   endif
+"
+"   let tmp = s:ProgPath("node")
+"   if tmp != {}
+"     let g:node_host_prog = tmp['path']
+"   else
+"     let g:loaded_node_provider = 0
+"   endif
 " endif
 "
-" let tmp = s:ProgPath("ruby")
-" if tmp != {}
-"   let g:ruby_host_prog = tmp['path']
-" else
-"   let g:loaded_ruby_provider = 0
-" endif
-"
-" let tmp = s:ProgPath("node")
-" if tmp != {}
-"   let g:node_host_prog = tmp['path']
-" else
-"   let g:loaded_node_provider = 0
-" endif
-
 "----------------------------------------
 " Mapping無効化 Leader割当
 "----------------------------------------
@@ -247,7 +267,7 @@ let g:unite_source_file_mru_limit = 200
 let g:unite_source_file_mru_filename_format = ':~:.' "最近開いたファイル 
 let g:unite_source_session_enable_auto_save = 1
 " let g:unite_source_bookmark_directory = s:dirs["bookmark"]
-
+" call s:debug_measure_time()
 "-- Mapping In Unite --
 augroup UniteKeyMap
     autocmd!
@@ -267,9 +287,9 @@ function! s:unite_my_settings()
     inoremap <silent><buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
 endfunction
 
-
 "-- KeyMapping --
 nnoremap <silent> <leader>h :<C-u>Denite file_mru<CR>
+nnoremap <silent> <leader>H :<C-u>Denite command_history<CR>
 nnoremap <silent> <leader>b :<C-u>Denite buffer<CR>
 nnoremap <silent> <leader>y :<C-u>Denite neoyank<CR>
 nnoremap <silent> <leader>o :<C-u>Unite -vertical -winwidth=30 outline<CR>
@@ -279,9 +299,10 @@ nnoremap <silent> <leader>M :<C-u>Unite mapping<CR>
 nnoremap <silent> <leader>s :<C-u>Unite session<CR>
 nnoremap <silent> <leader>r :<C-u>Denite register<CR>
 nnoremap <silent> <leader>f :<C-u>VimFiler -split -simple -winwidth=35 -no-quit<CR>
-nnoremap <silent> <leader>c :<C-u>Denite command_history<CR>
+nnoremap <silent> <leader>c :<C-u>Denite command<CR>
+nnoremap <silent> <leader>C :<C-u>Denite change<CR>
 nnoremap <silent> <leader>l :<C-u>Denite line<CR>
-"inoremap <silent> <C-s> <Esc>:Unite history/yank<CR>
+inoremap <silent> <C-s> <Esc>:Denite neoyank<CR>
 
 "--------------------------------------------------
 " 一文字消去
@@ -309,7 +330,7 @@ call submode#enter_with('unify-xX', 'n', 's', '<C-H>' ,'"_X')
 call submode#map('unify-xX', 'n', 'rs', 'x'     ,'<Plug>(unify-x)')
 call submode#map('unify-xX', 'n', 'rs', 'X'     ,'<Plug>(unify-X)')
 call submode#map('unify-xX', 'n', 'rs', '<C-H>' ,'<Plug>(unify-X)')
-
+" call s:debug_measure_time()
 "--------------------------------------------------
 " コマンドライン拡張
 "--------------------------------------------------
@@ -355,7 +376,7 @@ augroup END
 let g:previm_enable_realtime = 1
 nnoremap <silent> mp :PrevimOpen<CR>
 "
-
+" call s:debug_measure_time()
 "----------------------------------------
 " JunkFile
 "----------------------------------------
@@ -397,7 +418,7 @@ augroup END
 "-- <Leader>J にmap --
 nnoremap <silent> <leader>J :<C-u>Scratch<CR>
 
-
+" call s:debug_measure_time()
 "----------------------------------------
 " yank paste設定
 "----------------------------------------
@@ -468,12 +489,22 @@ map F <Plug>(clever-f-F)
 map t <Plug>(clever-f-t)
 map T <Plug>(clever-f-T)
 
+
 "-- incsearch --
 map ? <Plug>(incsearch-forward)
 map / <Plug>(incsearch-migemo-/)
 map g? <Plug>(incsearch-stay)
 map g/ <Plug>(incsearch-migemo-stay)
 
+
+
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+end
+
+set guioptions+=T           " ツールバー消去
+set guioptions+=m           " メニューバー非表示
 "------------------------------------------------------------
 " 行操作コマンド
 "------------------------------------------------------------
@@ -492,7 +523,7 @@ nnoremap <S-CR> mzo<ESC>`z
 nnoremap <C-S-CR> mzO<ESC>`z
 imap <C-S-CR> <Up><End><CR>
 
-
+" call s:debug_measure_time()
 "------------------------------------------------------------
 " バッファ, Window, Tab操作
 "------------------------------------------------------------
@@ -550,7 +581,7 @@ call submode#enter_with('tab-change', 'n', '', '<LocalLeader>t' ,'gt')
 call submode#map('tab-change', 'n', '', 't', 'gt')
 nnoremap <LocalLeader>T :<C-u>tabnew<CR>
 
-
+" call s:debug_measure_time()
 "------------------------------------------------------------
 " Undo 設定
 "------------------------------------------------------------
@@ -642,7 +673,7 @@ endfunction
 " - mapping -
 map L <Plug>(expand_region_expand)
 map H <Plug>(expand_region_shrink)
-
+" call s:debug_measure_time()
 " - 動作設定 -
 " 'ib' Support nesting of parentheses
 " 'iB' Support nesting of braces
@@ -698,7 +729,7 @@ if exists('s:markrement_chars')
 endif
 
 "-- AutoMarkrement --
-function! s:AutoMarkrement()
+functio! s:AutoMarkrement()
     if !exists('b:markrement_pos')
         let b:markrement_pos = 0
     else
@@ -708,11 +739,12 @@ function! s:AutoMarkrement()
     echo 'marked' s:markrement_char_array[b:markrement_pos]
 endfunction
 
-
+" call s:debug_measure_time()
 "----------------------------------------
 " Quick Run
 "----------------------------------------
 noremap <silent>mn :QuickRun<CR>
+nnoremap <expr><silent> mN quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 "-- key ---
 
 "-- config --
@@ -815,7 +847,7 @@ set matchpairs& matchpairs+=<:>,「:」,『:』,（:）,【:】,《:》,〈:〉,
 "     autocmd BufNew * call timer_start(0, { -> s:bufnew() })
 "     autocmd FileType terminal call s:filetype()
 " augroup END
-
+" call s:debug_measure_time()
 "----------------------------------------
 "折り畳み
 "----------------------------------------
@@ -859,7 +891,7 @@ call submode#map('move-l-head', 'nv', '', 'h'  ,'0')
 
 call submode#enter_with('move-l-tail', 'nv', '', '<LocalLeader>l'  ,'g_l')
 call submode#map('move-l-tail', 'nv', '', 'l'  ,'$')
-
+" call s:debug_measure_time()
 "----------------------------------------
 " mode切替
 "----------------------------------------
@@ -909,7 +941,7 @@ noremap <leader>e :<C-u>call <SID>ExplorerCurrentDir()<CR><CR>
 "----------------------------------------
 " Aligne
 "----------------------------------------
-" let g:Align_xstrlen=3
+let g:Align_xstrlen=3
 "// Windowsでの設定例です。Mac他の場合は外部コマンド部分を読み替えてください。
 " au FileType plantuml command! OpenUml :!start chrome %
 
@@ -917,8 +949,8 @@ noremap <leader>e :<C-u>call <SID>ExplorerCurrentDir()<CR><CR>
 " 保存時のみ実行する
 let g:ale_lint_on_text_changed = 0
 " 表示に関する設定
-let g:ale_sign_error = ''
-let g:ale_sign_warning = ''
+let g:ale_sign_error = 'E'
+let g:ale_sign_warning = 'w'
 let g:airline#extensions#ale#open_lnum_symbol = '('
 let g:airline#extensions#ale#close_lnum_symbol = ')'
 let g:ale_echo_msg_format = '[%linter%]%code: %%s'
@@ -930,7 +962,7 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 let g:indentLine_enable = 1
 
-
+" call s:debug_measure_time()
 
 "----------------------------------------
 " denite settin
@@ -947,6 +979,7 @@ let g:indentLine_enable = 1
 " augroup END
 
 augroup denite_filter
+  autocmd!
   autocmd FileType denite call s:denite_my_settings()
   function! s:denite_my_settings() abort
     nnoremap <silent><buffer><expr> <CR>
@@ -970,21 +1003,48 @@ augroup denite_filter
   endfunction
 augroup END
 
-" call denite#custom#map('insert', "jj", <denite:enter_mode:normal>)
-
 
  " コマンド．file_rec で使うコマンド
 " call denite#custom#var('file_rec', 'command',
     "\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 " Endif
 let s:denite_default_options = {
-\ 'split': 'floating',
-" "    \ 'highlight_filter_background': 'DeniteFilter',
-"   \ 'prompt': '>',
+\ 'split': 'floating'
 \ }
+	let s:menus = {}
 
-" call denite#custom#option('default', s:denite_default_options)
+	let s:menus.zsh = {
+		\ 'description': 'Edit your import zsh configuration'
+		\ }
+	let s:menus.zsh.file_candidates = [
+		\ ['zshrc', '~/.config/zsh/.zshrc'],
+		\ ['zshenv', '~/.zshenv'],
+		\ ]
 
+	let s:menus.my_commands = {
+		\ 'description': 'Example commands'
+		\ }
+	let s:menus.my_commands.command_candidates = [
+		\ ['Split the window', 'vnew'],
+		\ ['Open zsh menu', 'Denite menu:zsh'],
+		\ ['Format code', 'FormatCode', 'go,python'],
+		\ ]
+  call denite#custom#var('menr', 'menus', s:menus)
+" let s:menus = {}
+" let s:menus.vim = {
+"    \ 'description': 'Vim',
+"    \ }
+"
+" let s:menus.denite = {
+"    \ 'description': 'Denite',
+"    \ }
+"
+" let s:menus.vim.file_candidates = [
+"    \ ['  > Edit configuation file (init.vim)', '/bin/nvim/init.vim']
+"    \ ]
+" call denite#custom#var('menu', 'menus', s:menus)
+" call s:debug_measure_time()
+" call denite#custom#map('insert', "jj", <denite:enter_mode:normal>)
 "-- Denite Setting --
 " let g:denite_enable_start_insert = 1
 " use floating
@@ -1000,3 +1060,46 @@ let s:denite_default_options = {
 "    \ 'prompt': '$ ',
 "    \ 'start_filter': v:true,
 "    \ }
+"
+"
+if executable('rg')
+  call denite#custom#var('file_rec', 'command',
+        \ ['rg', '--files', '--glob', '!.git'])
+  call denite#custom#var('grep', 'command', ['rg'])
+endif
+
+
+
+
+
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
