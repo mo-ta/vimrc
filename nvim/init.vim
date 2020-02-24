@@ -208,7 +208,7 @@ let g:python3_host_prog = substitute(system('where python'), '\n.*', '', '')
 " if tmp != {}
 "   if tmp['main'] == 3
 "     let g:python3_host_prog = tmp['path']
-"     let g:loaded_python_provider = 0
+"       let g:loaded_python_provider = 0
 "   elseif s:python_path['main'] == 2
 "     let g:python_host_prog = tmp['path']
 "     let g:loaded_python3_provider = 0
@@ -216,24 +216,20 @@ let g:python3_host_prog = substitute(system('where python'), '\n.*', '', '')
 "     let g:loaded_python3_provider = 0
 "     let g:loaded_python_provider = 0
 "   endif
-" else
-"   let g:loaded_python3_provider = 0
-"   let g:loaded_python_provider = 0
-" endif
 "
-" let tmp = s:ProgPath("ruby")
-" if tmp != {}
-"   let g:ruby_host_prog = tmp['path']
-" else
-"   let g:loaded_ruby_provider = 0
-" endif
+"   let tmp = s:ProgPath("ruby")
+"   if tmp != {}
+"     let g:ruby_host_prog = tmp['path']
+"   else
+"     let g:loaded_ruby_provider = 0
+"   endif
 "
-" let tmp = s:ProgPath("node")
-" if tmp != {}
-"   let g:node_host_prog = tmp['path']
-" else
-"   let g:loaded_node_provider = 0
-" endif
+"   let tmp = s:ProgPath("node")
+"   if tmp != {}
+"     let g:node_host_prog = tmp['path']
+"   else
+"     let g:loaded_node_provider = 0
+"   endif
 " endif
 "
 "----------------------------------------
@@ -941,7 +937,7 @@ noremap <leader>e :<C-u>call <SID>ExplorerCurrentDir()<CR><CR>
 "----------------------------------------
 " Aligne
 "----------------------------------------
-" let g:Align_xstrlen=3
+let g:Align_xstrlen=3
 "// Windowsでの設定例です。Mac他の場合は外部コマンド部分を読み替えてください。
 " au FileType plantuml command! OpenUml :!start chrome %
 

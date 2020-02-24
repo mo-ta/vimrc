@@ -295,7 +295,7 @@ repo = 'joshdick/onedark.vim'
 
 [[plugins]]
 repo = 'neoclide/coc.nvim'
-merged = 0
+merged = '0'
 build = 'yarn install --frozen-lockfile'
 
 
