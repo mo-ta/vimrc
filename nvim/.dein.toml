@@ -1,37 +1,49 @@
 [[plugins]]
 repo = 'Shougo/dein.vim'
 
+# ==== Unite ====
 [[plugins]]
 repo = 'Shougo/unite.vim'
 
 [[plugins]]
+repo = 'Shougo/unite-session'
+
+[[plugins]]
+repo =  'tacroe/unite-mark'
+depends = ['unite']
+
+[[plugins]]
+repo = 'Shougo/unite-outline'
+
+
+[[plugins]]
+repo = 'sgur/unite-qf'
+
+
+# ==== Denite ====
+[[plugins]]
 repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo =  'Shougo/neomru.vim'
+
+[[plugins]]
+repo =  'Shougo/neoyank.vim'
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
 
-[[plugins]]
-repo = 'Shougo/unite-session'
-
-# [[plugins]]
-# repo = 'osyo-manga/vim-vigemo'
-
-# [[plugins]]
-# repo = 'haya14busa/vim-migemo'
+# ==== Migemo ====
 [[plugins]]
 repo = 'haya14busa/incsearch.vim'
+
 [[plugins]]
 repo = 'haya14busa/incsearch-migemo.vim'
 # [[plugins]]
 # repo = 'haya14busa/incsearch-fuzzy.vim'
 
-[[plugins]]
-repo    = 'vim-airline/vim-airline'
-depends = ['vim-airline-themes']
 
-[[plugins]]
-repo = 'vim-airline/vim-airline-themes'
-
+# ==== color syntacs ====
 [[plugins]]
 repo = 'tlhr/anderson.vim'
 
@@ -39,8 +51,27 @@ repo = 'tlhr/anderson.vim'
 repo = 'dylnmc/novum.vim'
 
 [[plugins]]
-# repo = 'mo-ta/vim-colors-mota'
 repo = 'aereal/vim-colors-japanesque'
+
+
+
+# ==== Ariline ====
+[[plugins]]
+repo    = 'vim-airline/vim-airline'
+depends = ['vim-airline-themes']
+
+[[plugins]]
+repo = 'vim-airline/vim-airline-themes'
+
+
+
+# ==== Git ====
+[[plugins]]
+repo = "tpope/vim-fugitive"
+
+[[plugins]]
+repo = "tpope/vim-rhubarb"
+depends = ['vim-fugitive']
 
 # [[plugins]]
 # repo = 'fuenor/qfixhowm'
@@ -48,17 +79,6 @@ repo = 'aereal/vim-colors-japanesque'
 [[plugins]]
 repo = 'thinca/vim-quickrun'
 
-[[plugins]]
-repo =  'tacroe/unite-mark'
-depends = ['unite']
-
-[[plugins]]
-repo =  'Shougo/neomru.vim'
-depends = ['unite']
-
-[[plugins]]
-repo =  'Shougo/neoyank.vim'
-depends = ['unite']
 
 [[plugins]]
 # repo = 'kana/vim-submode'
@@ -73,8 +93,6 @@ repo = 'tpope/vim-endwise'
 [[plugins]]
 repo =  'easymotion/vim-easymotion'
 
-[[plugins]]
-repo = 'Shougo/unite-outline'
 
 # [[plugins]]
 # repo =  'thinca/vim-ref'
@@ -109,8 +127,6 @@ repo = 'rhysd/clever-f.vim'
 # repo = 'rhysd/accelerated-jk'
 repo = 'mo-ta/accelerated-jk'
 
-[[plugins]]
-repo = 'sgur/unite-qf'
 
 
 # [[plugins]]
@@ -140,8 +156,7 @@ repo = 'vim-jp/vimdoc-ja'
 [[plugins]]
 repo = 'tyru/caw.vim'
 
-# [[plugins]]
-# repo = 'tpope/vim-fugitive'
+
 # [[plugins]]
 # repo = 'JuliaEditorSupport/julia-vim'
 #[[plugins]]
@@ -229,14 +244,7 @@ repo = 'mechatroner/rainbow_csv'
 
 
 
-
-#[[plugins]]
 #repo = 'ctrlpvim/ctrlp.vim'
-# [[plugins]]
-# repo = "airblade/vim-gitgutter"
-
-# [[plugins]]
-# repo = "tpope/vim-fugitive"
 
 # [[plugins]]
 # repo = "Vim-scripts/Align"
@@ -266,12 +274,28 @@ repo = "machakann/vim-highlightedyank"
 repo = "itchyny/vim-parenmatch"
 
 [[plugins]]
-repo = 'ncm2/float-preview.nvim.git'
+repo = 'ncm2/float-preview.nvim'
 
 [[plugins]]
 repo = 'Shougo/vinarise'
 
+
 [[plugins]]
-repo = 'vim-voom/VOom'
+repo = 'mattn/benchvimrc-vim'
+
+[[plugins]]
+repo = 'vim-voom/VOoM'
+
+[[plugins]]
+repo = 'joshdick/onedark.vim'
+
+# [[plugins]]
+# repo = 'nixprime/cpsm'
+# build = 'env PY3=0N ./install.sh'
+
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+merged = 0
+build = 'yarn install --frozen-lockfile'
 
 
