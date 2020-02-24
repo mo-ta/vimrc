@@ -271,5 +271,7 @@ repo = 'ncm2/float-preview.nvim.git'
 [[plugins]]
 repo = 'Shougo/vinarise'
 
+[[plugins]]
+repo = 'vim-voom/VOom'
 
 
